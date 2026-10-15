@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Technical Report{% endblock %}
+{% block page_title %}PS-011 Technical Audit Report{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      <i class="fa-solid fa-file-shield" style="color: #1e40af;"></i> Formal Technical Audit Report (AIORI-3 PS-011)
+    </div>
+    <div style="display: flex; gap: 8px;">
+      <a href="{{ url_for('view_technical_report', format='raw') }}" class="btn btn-secondary btn-sm" target="_blank">
+        <i class="fa-solid fa-code"></i> View Raw Markdown
+      </a>
+      <button onclick="window.print()" class="btn btn-primary btn-sm">
+        <i class="fa-solid fa-print"></i> Print / Save PDF
+      </button>
+    </div>
+  </div>
+
+  <div class="card-body" style="padding: 28px 36px;">
+    <div id="reportMarkdownContainer" style="display: none;">{{ report_markdown }}</div>
+    <div id="reportRendered" style="line-height: 1.7; color: #1e293b;"></div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const rawMd = document.getElementById("reportMarkdownContainer").textContent;
+    const container = document.getElementById("reportRendered");
+    container.innerHTML = marked.parse(rawMd);
+
+    // Apply clean table styles to rendered markdown tables
+    const tables = container.querySelectorAll("table");
+    tables.forEach(t => {
+      t.className = "data-table";
+      const wrapper = document.createElement("div");
+      wrapper.className = "table-responsive";
+      wrapper.style.margin = "16px 0";
+      t.parentNode.insertBefore(wrapper, t);
+      wrapper.appendChild(t);
+    });
+  });
+</script>
+<style>
+  #reportRendered h1 { font-size: 22px; font-weight: 800; color: #0f172a; margin-bottom: 12px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
+  #reportRendered h2 { font-size: 17px; font-weight: 700; color: #1e3a8a; margin-top: 24px; margin-bottom: 10px; border-bottom: 1px solid #e2e8f0; padding-bottom: 6px; }
+  #reportRendered h3 { font-size: 14.5px; font-weight: 700; color: #0f172a; margin-top: 18px; margin-bottom: 8px; }
+  #reportRendered p { font-size: 13.5px; margin-bottom: 12px; color: #334155; }
+  #reportRendered ul, #reportRendered ol { margin-left: 24px; margin-bottom: 14px; font-size: 13px; color: #334155; }
+  #reportRendered li { margin-bottom: 4px; }
+  #reportRendered code { font-family: monospace; font-size: 12px; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; color: #0f172a; }
+  #reportRendered pre code { display: block; padding: 12px; overflow-x: auto; background: #0f172a; color: #f8fafc; border-radius: 8px; line-height: 1.4; }
+  #reportRendered blockquote { border-left: 4px solid #3b82f6; padding-left: 14px; color: #475569; font-style: italic; margin: 14px 0; }
+  @media print {
+    .sidebar, .top-header, .btn { display: none !important; }
+    .main-wrapper { margin-left: 0 !important; }
+    .card { border: none !important; box-shadow: none !important; }
+  }
+</style>
+{% endblock %}

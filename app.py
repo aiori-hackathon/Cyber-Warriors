@@ -332,7 +332,14 @@ def export_csv(table_type):
 @app.route("/reports/technical")
 def view_technical_report():
     report_data = ReportGenerator.generate_full_technical_report()
-    return Response(report_data["markdown"], mimetype="text/markdown")
+    if request.args.get("format") == "raw":
+        return Response(report_data["markdown"], mimetype="text/markdown")
+    return render_template(
+        "technical_report_view.html",
+        active_page="reports",
+        report_markdown=report_data["markdown"],
+        generated_at=report_data["generated_at"]
+    )
 
 
 @app.route("/reports/download/proposal-pdf")

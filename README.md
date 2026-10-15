@@ -23,6 +23,19 @@ This project delivers an **authorised attack-surface discovery and monitoring sy
 
 ---
 
+## 📑 Documentation & Deliverables Index
+
+| Document | Purpose | Location |
+| :--- | :--- | :--- |
+| **Technical Audit Report** | Complete technical report explaining architecture, the 4 checks, tests, and ethical boundaries | [`docs/technical_report.md`](./docs/technical_report.md) |
+| **5-Minute Mentor Demo Script** | Step-by-step presentation script with "What to Click" and "What to Say" | [`docs/demo_script.md`](./docs/demo_script.md) |
+| **Testing Checklist & Audit** | Pre-demo verification checklist with real test execution evidence | [`docs/testing_checklist.md`](./docs/testing_checklist.md) |
+| **The 4 Documented Checks** | Technical deep-dive into DNS, TLS, Ports, and Change Detection | [`docs/4_DOCUMENTED_CHECKS.md`](./docs/4_DOCUMENTED_CHECKS.md) |
+| **Mentor Demo & Pseudocode** | Pseudocode snippet and mentor demonstration workflow | [`docs/MENTOR_DEMO_PSEUDOCODE.md`](./docs/MENTOR_DEMO_PSEUDOCODE.md) |
+| **Official Proposal PDF** | Compiled formal proposal document for Deliverable #2 | [`Proposed-structure-hackathon.pdf`](./Proposed-structure-hackathon.pdf) |
+
+---
+
 ## 2. Technology Stack
 
 - **Backend & Logic:** Python 3.10+ (using standard library `ssl`, `socket`, `sqlite3`, `threading`)
