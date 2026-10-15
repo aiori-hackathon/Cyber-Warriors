@@ -17,3 +17,13 @@ venv/
 !data/.gitkeep
 !reports/
 !reports/.gitkeep
+# Local database and generated data
+data/*.sqlite
+data/*.sqlite3
+data/*.db
+
+# Python environment and secrets
+venv/
+.venv/
+__pycache__/
+.env
