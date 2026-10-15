@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Change History{% endblock %}
+{% block page_title %}Check 4: Baseline Change History &amp; Drift Events{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      <i class="fa-solid fa-code-compare" style="color: #1e40af;"></i> Attack Surface Delta &amp; Asset Drift Audit Log
+    </div>
+    <div style="font-size: 11px; color: var(--text-muted);">
+      Active Baseline Reference: <strong>{{ baseline.snapshot_name if baseline else 'Golden Baseline' }}</strong>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <!-- Explanatory Alert -->
+    <div style="padding: 12px 16px; border-radius: 8px; background: #eff6ff; border: 1px solid #bfdbfe; margin-bottom: 20px; font-size: 12px; color: #1e40af;">
+      <i class="fa-solid fa-circle-info mr-1"></i>
+      <strong>Check 4 Documentation:</strong> Maintains a versioned golden baseline snapshot. Every subsequent discovery scan is automatically compared against the active baseline to identify asset additions, deletions, unapproved services, DNS modifications, and certificate expiration transitions.
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+      <input type="text" id="changeSearchInput" onkeyup="filterTable('changeSearchInput', 'changesTable')" class="search-input" placeholder="Search change events...">
+      <div style="display: flex; gap: 8px;">
+        <button onclick="resetGoldenBaseline()" class="btn btn-secondary btn-sm">
+          <i class="fa-solid fa-clock-rotate-left"></i> Reset to Golden Baseline (0 alerts)
+        </button>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-responsive">
+      <table class="data-table" id="changesTable">
+        <thead>
+          <tr>
+            <th>Change ID</th>
+            <th>Severity</th>
+            <th>Change Classification</th>
+            <th>Drift Details &amp; Evidence</th>
+            <th>Detected Timestamp</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in changes %}
+          <tr>
+            <td style="font-weight: 600; color: var(--text-muted);">#{{ c.id }}</td>
+            <td>
+              {% if c.severity == 'CRITICAL' %}
+                <span class="badge badge-critical">CRITICAL</span>
+              {% elif c.severity == 'HIGH' %}
+                <span class="badge badge-high">HIGH</span>
+              {% elif c.severity == 'MEDIUM' %}
+                <span class="badge badge-medium">MEDIUM</span>
+              {% else %}
+                <span class="badge badge-low">{{ c.severity }}</span>
+              {% endif %}
+            </td>
+            <td>
+              <strong style="color: #1e40af;">{{ c.title }}</strong>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">
+                Type: <code>{{ c.change_type }}</code>
+              </div>
+            </td>
+            <td style="max-width: 380px;">
+              <div style="font-size: 12px; color: var(--text-main);">{{ c.description }}</div>
+              {% if c.evidence %}
+                <div style="margin-top: 4px; font-family: monospace; font-size: 10.5px; color: #475569; background: #f8fafc; padding: 4px 8px; border-radius: 4px; border: 1px solid #e2e8f0; overflow-x: auto;">
+                  {{ c.evidence }}
+                </div>
+              {% endif %}
+            </td>
+            <td style="font-size: 11px; color: var(--text-muted); white-space: nowrap;">
+              {{ c.detected_at[:19] }}
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="5" style="text-align: center; padding: 24px; color: var(--text-muted);">
+              No change events recorded. Attack surface is identical to active baseline.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

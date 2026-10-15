@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}DNS Monitoring{% endblock %}
+{% block page_title %}Check 1: DNS Records &amp; Dangling CNAMEs{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      <i class="fa-solid fa-network-wired" style="color: #1e40af;"></i> Public DNS Observations &amp; Dangling CNAME Inspector
+    </div>
+    <div style="font-size: 11px; color: var(--text-muted);">
+      Protocol: A, AAAA, CNAME, MX (dnspython)
+    </div>
+  </div>
+
+  <div class="card-body">
+    <!-- Explanatory Alert -->
+    <div style="padding: 12px 16px; border-radius: 8px; background: #f0fdf4; border: 1px solid #bbf7d0; margin-bottom: 20px; font-size: 12px; color: #166534;">
+      <i class="fa-solid fa-circle-info mr-1"></i>
+      <strong>Check 1 Documentation:</strong> Catalogs public DNS zone records for approved lab domains. Identifies potential dangling CNAME records pointing to orphaned cloud infrastructure (AWS S3, Elastic Beanstalk, GitHub Pages, Azure, Heroku) for manual verification without claiming automatic exploitability.
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+      <input type="text" id="dnsSearchInput" onkeyup="filterTable('dnsSearchInput', 'dnsTable')" class="search-input" placeholder="Search domain, record, or target...">
+      <div style="display: flex; gap: 8px;">
+        <span class="badge badge-high" style="font-size: 11px;">Dangling Candidates Flagged</span>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-responsive">
+      <table class="data-table" id="dnsTable">
+        <thead>
+          <tr>
+            <th>Domain</th>
+            <th>Type</th>
+            <th>Record Value (Destination)</th>
+            <th>TTL</th>
+            <th>Dangling Candidate Status</th>
+            <th>Observed At</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in records %}
+          <tr>
+            <td><strong style="color: #1e40af;">{{ r.domain }}</strong></td>
+            <td><span class="badge badge-neutral" style="font-family: monospace;">{{ r.record_type }}</span></td>
+            <td><code style="color: #0f172a; font-size: 12px;">{{ r.record_value }}</code></td>
+            <td style="color: var(--text-muted); font-size: 11px;">{{ r.ttl }}s</td>
+            <td>
+              {% if r.is_dangling_candidate %}
+                <span class="badge badge-high">
+                  <i class="fa-solid fa-link-slash"></i> Dangling Candidate ({{ r.dangling_provider or 'Cloud' }})
+                </span>
+                <div style="font-size: 10px; color: #c2410c; margin-top: 3px; max-width: 340px;">
+                  {{ r.dangling_reason }}
+                </div>
+              {% else %}
+                <span class="badge badge-success"><i class="fa-solid fa-check"></i> Normal</span>
+              {% endif %}
+            </td>
+            <td style="font-size: 11px; color: var(--text-muted); white-space: nowrap;">{{ r.observed_at[:19] }}</td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="6" style="text-align: center; padding: 24px; color: var(--text-muted);">
+              No DNS observations recorded. Run a scan to catalog DNS records.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

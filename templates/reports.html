@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}Reports &amp; Exports{% endblock %}
+{% block page_title %}Security Reports &amp; CSV Data Exports{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      <i class="fa-solid fa-file-export" style="color: #1e40af;"></i> Data Exports &amp; Compliance Deliverables
+    </div>
+  </div>
+
+  <div class="card-body">
+    <!-- Official Deliverables Section -->
+    <div style="margin-bottom: 24px;">
+      <h3 style="font-size: 14px; font-weight: 700; color: var(--navy-dark); margin-bottom: 12px;">
+        <i class="fa-solid fa-graduation-cap" style="color: #2563eb;"></i> Hackathon Deliverables
+      </h3>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px;">
+        <div style="padding: 16px; border: 1px solid #bfdbfe; border-radius: 10px; background: #eff6ff; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;">
+          <div>
+            <div style="font-weight: 700; font-size: 13px; color: #1e40af;">
+              <i class="fa-solid fa-file-pdf text-red-600"></i> Proposed-structure-hackathon.pdf
+            </div>
+            <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px;">
+              Deliverable #2 mandated by AIORI-3. Formal technical proposal following hackathon structure.
+            </div>
+          </div>
+          <a href="{{ url_for('download_proposal_pdf') }}" class="btn btn-primary btn-sm" style="white-space: nowrap;">
+            <i class="fa-solid fa-download"></i> Download PDF
+          </a>
+        </div>
+
+        <div style="padding: 16px; border: 1px solid #bbf7d0; border-radius: 10px; background: #f0fdf4; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;">
+          <div>
+            <div style="font-weight: 700; font-size: 13px; color: #166534;">
+              <i class="fa-solid fa-file-lines text-emerald-600"></i> Final Technical Report (Markdown)
+            </div>
+            <div style="font-size: 11.5px; color: var(--text-muted); margin-top: 4px;">
+              Live compiled markdown report containing current observations, seeded issue results, and false-positive triage.
+            </div>
+          </div>
+          <a href="{{ url_for('view_technical_report') }}" class="btn btn-secondary btn-sm" style="white-space: nowrap;">
+            <i class="fa-solid fa-eye"></i> View Report
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CSV Data Export Section -->
+    <div>
+      <h3 style="font-size: 14px; font-weight: 700; color: var(--navy-dark); margin-bottom: 12px;">
+        <i class="fa-solid fa-table" style="color: #2563eb;"></i> Structured CSV Dataset Exports
+      </h3>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px;">
+        <div style="padding: 14px; border: 1px solid var(--border-color); border-radius: 8px; background: #ffffff;">
+          <div style="font-weight: 600; font-size: 13px; color: var(--navy-dark);">Approved Asset Inventory</div>
+          <div style="font-size: 11px; color: var(--text-muted); margin: 4px 0 10px;">Domains, hosts, IPs, and approval scope status.</div>
+          <a href="{{ url_for('export_csv', table_type='assets') }}" class="btn btn-secondary btn-sm">
+            <i class="fa-solid fa-file-csv text-blue-600"></i> Export Assets CSV
+          </a>
+        </div>
+
+        <div style="padding: 14px; border: 1px solid var(--border-color); border-radius: 8px; background: #ffffff;">
+          <div style="font-weight: 600; font-size: 13px; color: var(--navy-dark);">DNS Records &amp; Dangling CNAMEs</div>
+          <div style="font-size: 11px; color: var(--text-muted); margin: 4px 0 10px;">A, AAAA, CNAME, MX records and dangling candidates.</div>
+          <a href="{{ url_for('export_csv', table_type='dns') }}" class="btn btn-secondary btn-sm">
+            <i class="fa-solid fa-file-csv text-blue-600"></i> Export DNS CSV
+          </a>
+        </div>
+
+        <div style="padding: 14px; border: 1px solid var(--border-color); border-radius: 8px; background: #ffffff;">
+          <div style="font-weight: 600; font-size: 13px; color: var(--navy-dark);">TLS Certificate Status</div>
+          <div style="font-size: 11px; color: var(--text-muted); margin: 4px 0 10px;">Validity dates, expiry countdowns, SANs, and issuers.</div>
+          <a href="{{ url_for('export_csv', table_type='tls') }}" class="btn btn-secondary btn-sm">
+            <i class="fa-solid fa-file-csv text-blue-600"></i> Export TLS CSV
+          </a>
+        </div>
+
+        <div style="padding: 14px; border: 1px solid var(--border-color); border-radius: 8px; background: #ffffff;">
+          <div style="font-weight: 600; font-size: 13px; color: var(--navy-dark);">Port &amp; Service Reachability</div>
+          <div style="font-size: 11px; color: var(--text-muted); margin: 4px 0 10px;">TCP handshake states, latency, service banners, and unexpected flags.</div>
+          <a href="{{ url_for('export_csv', table_type='ports') }}" class="btn btn-secondary btn-sm">
+            <i class="fa-solid fa-file-csv text-blue-600"></i> Export Ports CSV
+          </a>
+        </div>
+
+        <div style="padding: 14px; border: 1px solid var(--border-color); border-radius: 8px; background: #ffffff;">
+          <div style="font-weight: 600; font-size: 13px; color: var(--navy-dark);">Security Findings Registry</div>
+          <div style="font-size: 11px; color: var(--text-muted); margin: 4px 0 10px;">Identified vulnerabilities, confidence ratings, and review notes.</div>
+          <a href="{{ url_for('export_csv', table_type='findings') }}" class="btn btn-secondary btn-sm">
+            <i class="fa-solid fa-file-csv text-blue-600"></i> Export Findings CSV
+          </a>
+        </div>
+
+        <div style="padding: 14px; border: 1px solid var(--border-color); border-radius: 8px; background: #ffffff;">
+          <div style="font-weight: 600; font-size: 13px; color: var(--navy-dark);">Baseline Drift Changes</div>
+          <div style="font-size: 11px; color: var(--text-muted); margin: 4px 0 10px;">Historical change events recorded across all scans.</div>
+          <a href="{{ url_for('export_csv', table_type='changes') }}" class="btn btn-secondary btn-sm">
+            <i class="fa-solid fa-file-csv text-blue-600"></i> Export Changes CSV
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

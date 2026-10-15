@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Attack-Surface Monitor{% endblock %} | AIORI-3 PS-011</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar (Navy Blue Theme) -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand-icon">
+          <i class="fa-solid fa-shield-halved"></i>
+        </div>
+        <div>
+          <div class="brand-title">ASM Sentinel</div>
+          <div class="brand-subtitle">AIORI-3 PS-011 Monitor</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-group-title">Operations</div>
+        <a href="{{ url_for('dashboard') }}" class="nav-item {% if active_page == 'dashboard' %}active{% endif %}">
+          <i class="fa-solid fa-chart-pie"></i> Overview
+        </a>
+        <a href="{{ url_for('assets_page') }}" class="nav-item {% if active_page == 'assets' %}active{% endif %}">
+          <i class="fa-solid fa-layer-group"></i> Asset Inventory
+        </a>
+
+        <div class="nav-group-title">The 4 Documented Checks</div>
+        <a href="{{ url_for('dns_page') }}" class="nav-item {% if active_page == 'dns' %}active{% endif %}">
+          <i class="fa-solid fa-network-wired"></i> DNS Monitoring
+        </a>
+        <a href="{{ url_for('tls_page') }}" class="nav-item {% if active_page == 'tls' %}active{% endif %}">
+          <i class="fa-solid fa-lock"></i> TLS Certificate Monitoring
+        </a>
+        <a href="{{ url_for('ports_page') }}" class="nav-item {% if active_page == 'ports' %}active{% endif %}">
+          <i class="fa-solid fa-server"></i> Port &amp; Service Monitoring
+        </a>
+        <a href="{{ url_for('changes_page') }}" class="nav-item {% if active_page == 'changes' %}active{% endif %}">
+          <i class="fa-solid fa-code-compare"></i> Change History
+        </a>
+
+        <div class="nav-group-title">Security &amp; Audit</div>
+        <a href="{{ url_for('findings_page') }}" class="nav-item {% if active_page == 'findings' %}active{% endif %}">
+          <i class="fa-solid fa-triangle-exclamation"></i> Security Findings
+        </a>
+        <a href="{{ url_for('scan_history_page') }}" class="nav-item {% if active_page == 'scans' %}active{% endif %}">
+          <i class="fa-solid fa-clock-rotate-left"></i> Scan History
+        </a>
+        <a href="{{ url_for('reports_page') }}" class="nav-item {% if active_page == 'reports' %}active{% endif %}">
+          <i class="fa-solid fa-file-lines"></i> Reports &amp; Exports
+        </a>
+        <a href="{{ url_for('settings_page') }}" class="nav-item {% if active_page == 'settings' %}active{% endif %}">
+          <i class="fa-solid fa-sliders"></i> Settings &amp; Approved Scope
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="scope-badge-sidebar">
+          <i class="fa-solid fa-circle-check"></i> Authorised Scope Active
+        </div>
+        <div style="margin-top: 8px; font-size: 10px; color: #64748b;">
+          Max: 20 Domains | 10 Hosts
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-wrapper">
+      <!-- Top Header -->
+      <header class="top-header">
+        <div class="header-left">
+          <h1 class="page-title">{% block page_title %}Dashboard{% endblock %}</h1>
+          <span class="badge badge-neutral" style="font-size: 11px;">
+            <i class="fa-solid fa-microchip"></i> Local Windows Engine
+          </span>
+        </div>
+
+        <div class="header-actions">
+          <button id="btn-simulate-scan" onclick="triggerSeededSimulation()" class="btn btn-secondary btn-sm" title="Runs safe demonstration with seeded issues">
+            <i class="fa-solid fa-flask" style="color: #2563eb;"></i> Run Seeded Demo
+          </button>
+          <button id="btn-live-scan" onclick="startLiveScan()" class="btn btn-primary btn-sm">
+            <i class="fa-solid fa-play"></i> Authorised Live Scan
+          </button>
+        </div>
+      </header>
+
+      <!-- Page Content -->
+      <main class="content-body">
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+  </div>
+
+  <div id="toast-container" class="toast-container"></div>
+  <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

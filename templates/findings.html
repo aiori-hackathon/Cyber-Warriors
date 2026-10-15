@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}Security Findings{% endblock %}
+{% block page_title %}Security Findings &amp; Triage Lifecycle{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      <i class="fa-solid fa-triangle-exclamation" style="color: #dc2626;"></i> Actionable Security Findings Registry
+    </div>
+    <div style="font-size: 11px; color: var(--text-muted);">
+      Total: {{ findings|length }} Findings
+    </div>
+  </div>
+
+  <div class="card-body">
+    <!-- Filter Controls -->
+    <div class="filter-bar">
+      <input type="text" id="findingSearchInput" onkeyup="filterTable('findingSearchInput', 'findingsTable')" class="search-input" placeholder="Search by title, asset, category...">
+      <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+        <a href="{{ url_for('findings_page') }}" class="btn btn-secondary btn-sm {% if not filter_status %}btn-primary{% endif %}">All</a>
+        <a href="{{ url_for('findings_page', status='OPEN') }}" class="btn btn-secondary btn-sm {% if filter_status == 'OPEN' %}btn-primary{% endif %}">Open</a>
+        <a href="{{ url_for('findings_page', status='ACKNOWLEDGED') }}" class="btn btn-secondary btn-sm {% if filter_status == 'ACKNOWLEDGED' %}btn-primary{% endif %}">Acknowledged</a>
+        <a href="{{ url_for('findings_page', status='RESOLVED') }}" class="btn btn-secondary btn-sm {% if filter_status == 'RESOLVED' %}btn-primary{% endif %}">Resolved</a>
+        <a href="{{ url_for('findings_page', status='FALSE_POSITIVE') }}" class="btn btn-secondary btn-sm {% if filter_status == 'FALSE_POSITIVE' %}btn-primary{% endif %}">False Positive</a>
+      </div>
+    </div>
+
+    <!-- Findings Table -->
+    <div class="table-responsive">
+      <table class="data-table" id="findingsTable">
+        <thead>
+          <tr>
+            <th>Severity</th>
+            <th>Finding Title &amp; Category</th>
+            <th>Triage &amp; Evidence</th>
+            <th>Defensive Action</th>
+            <th>Status</th>
+            <th style="text-align: right;">Review Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for f in findings %}
+          <tr>
+            <td>
+              {% if f.severity == 'CRITICAL' %}
+                <span class="badge badge-critical">CRITICAL</span>
+              {% elif f.severity == 'HIGH' %}
+                <span class="badge badge-high">HIGH</span>
+              {% elif f.severity == 'MEDIUM' %}
+                <span class="badge badge-medium">MEDIUM</span>
+              {% else %}
+                <span class="badge badge-low">{{ f.severity }}</span>
+              {% endif %}
+            </td>
+            <td>
+              <div style="font-weight: 700; color: var(--navy-dark);">{{ f.title }}</div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 3px;">
+                Category: <code>{{ f.category }}</code> | Detected: {{ f.created_at[:19] }}
+              </div>
+            </td>
+            <td style="max-width: 320px;">
+              <div style="font-size: 11.5px; color: var(--text-main);">{{ f.description }}</div>
+              <div style="margin-top: 4px; display: flex; align-items: center; gap: 6px;">
+                <span class="badge {% if f.confidence == 'HIGH' %}badge-success{% else %}badge-low{% endif %}">Conf: {{ f.confidence }}</span>
+                <span style="font-size: 10px; color: var(--text-muted);">FP Risk: {{ f.false_positive_risk }}</span>
+              </div>
+              {% if f.review_notes %}
+                <div style="font-size: 10.5px; color: #475569; margin-top: 4px; font-style: italic;">
+                  Note: {{ f.review_notes }}
+                </div>
+              {% endif %}
+            </td>
+            <td style="font-size: 11.5px; color: #1e40af; max-width: 260px;">
+              {{ f.defensive_action }}
+            </td>
+            <td>
+              {% if f.status == 'OPEN' %}
+                <span class="badge badge-critical"><i class="fa-solid fa-circle-exclamation"></i> OPEN</span>
+              {% elif f.status == 'ACKNOWLEDGED' %}
+                <span class="badge badge-medium"><i class="fa-solid fa-eye"></i> ACKNOWLEDGED</span>
+              {% elif f.status == 'RESOLVED' %}
+                <span class="badge badge-success"><i class="fa-solid fa-check"></i> RESOLVED</span>
+              {% elif f.status == 'FALSE_POSITIVE' %}
+                <span class="badge badge-neutral"><i class="fa-solid fa-filter"></i> FALSE POSITIVE</span>
+              {% endif %}
+            </td>
+            <td style="text-align: right; white-space: nowrap;">
+              <button onclick="openTriageModal('{{ f.id }}', '{{ f.title|escape }}', '{{ f.status }}')" class="btn btn-secondary btn-sm">
+                <i class="fa-solid fa-pen-to-square"></i> Triage
+              </button>
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="6" style="text-align: center; padding: 24px; color: var(--text-muted);">
+              No security findings matching filter criteria.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Triage Finding Modal -->
+<div id="triageModal" class="modal-backdrop">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <div class="modal-title"><i class="fa-solid fa-clipboard-check" style="color: #2563eb;"></i> Triage Security Finding</div>
+      <button onclick="closeModal('triageModal')" style="background: none; border: none; font-size: 18px; cursor: pointer; color: var(--text-muted);">&times;</button>
+    </div>
+    <form id="triageForm" method="POST" action="">
+      <div class="modal-body">
+        <div style="font-size: 13px; font-weight: 700; color: var(--navy-dark); margin-bottom: 14px;" id="triageModalFindingTitle"></div>
+
+        <div class="form-group">
+          <label class="form-label">Review Status</label>
+          <select name="status" id="triageStatusSelect" class="form-control" required>
+            <option value="OPEN">OPEN (Requires ongoing attention)</option>
+            <option value="ACKNOWLEDGED">ACKNOWLEDGED (Accepted for investigation)</option>
+            <option value="RESOLVED">RESOLVED (Remediation deployed)</option>
+            <option value="FALSE_POSITIVE">FALSE_POSITIVE (Verified non-issue / Expected behavior)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">False-Positive Rationale (if applicable)</label>
+          <input type="text" name="fp_reason" class="form-control" placeholder="e.g. Expected CloudFront multi-tenant default routing">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Investigator / Review Notes</label>
+          <textarea name="notes" class="form-control" rows="3" placeholder="Document manual verification steps or ticket reference..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" onclick="closeModal('triageModal')" class="btn btn-secondary">Cancel</button>
+        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-check"></i> Save Triage Decision</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  function openTriageModal(findingId, title, currentStatus) {
+    const form = document.getElementById("triageForm");
+    form.action = `/api/findings/${findingId}/update-status`;
+    document.getElementById("triageModalFindingTitle").innerText = title;
+    document.getElementById("triageStatusSelect").value = currentStatus;
+    openModal("triageModal");
+  }
+</script>
+{% endblock %}

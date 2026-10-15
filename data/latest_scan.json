@@ -1,6 +1,6 @@
 {
-  "snapshot_id": "scan_simulated_20261015_035911",
-  "timestamp": "2026-10-15T03:59:11.499378+00:00",
+  "snapshot_id": "scan_simulated_20261015_042029",
+  "timestamp": "2026-10-15T04:20:29.192010+00:00",
   "scan_scope": {
     "domains_count": 20,
     "hosts_count": 10
@@ -29,8 +29,8 @@
           "is_valid": true,
           "is_expired": false,
           "days_to_expiry": 180,
-          "not_before": "2026-08-16T03:59:11.499388+00:00",
-          "not_after": "2027-04-13T03:59:11.499388+00:00",
+          "not_before": "2026-08-16T04:20:29.192020+00:00",
+          "not_after": "2027-04-13T04:20:29.192020+00:00",
           "issuer": "DigiCert Global Root CA",
           "subject": "lab-portal.aiori.internal",
           "sans": [
@@ -46,7 +46,7 @@
       ],
       "has_dangling_records": false,
       "dangling_candidates": [],
-      "last_scanned": "2026-10-14T03:59:11.499423+00:00"
+      "last_scanned": "2026-10-14T04:20:29.192059+00:00"
     },
     {
       "domain": "api.lab-portal.aiori.internal",
@@ -67,7 +67,7 @@
       "tls_certificates": [],
       "has_dangling_records": false,
       "dangling_candidates": [],
-      "last_scanned": "2026-10-14T03:59:11.499423+00:00"
+      "last_scanned": "2026-10-14T04:20:29.192059+00:00"
     },
     {
       "domain": "auth.lab-portal.aiori.internal",
@@ -88,7 +88,7 @@
       "tls_certificates": [],
       "has_dangling_records": false,
       "dangling_candidates": [],
-      "last_scanned": "2026-10-14T03:59:11.499423+00:00"
+      "last_scanned": "2026-10-14T04:20:29.192059+00:00"
     },
     {
       "domain": "staging-api.aiori.internal",
@@ -109,7 +109,7 @@
       "tls_certificates": [],
       "has_dangling_records": false,
       "dangling_candidates": [],
-      "last_scanned": "2026-10-14T03:59:11.499423+00:00"
+      "last_scanned": "2026-10-14T04:20:29.192059+00:00"
     },
     {
       "domain": "test-cdn.aiori.internal",
@@ -148,7 +148,7 @@
           "reason": "Target returned HTTP 404 (Multi-tenant edge distribution)"
         }
       ],
-      "last_scanned": "2026-10-14T03:59:11.499423+00:00"
+      "last_scanned": "2026-10-14T04:20:29.192059+00:00"
     },
     {
       "domain": "legacy-app.aiori.internal",
@@ -169,7 +169,7 @@
       "tls_certificates": [],
       "has_dangling_records": false,
       "dangling_candidates": [],
-      "last_scanned": "2026-10-14T03:59:11.499423+00:00"
+      "last_scanned": "2026-10-14T04:20:29.192059+00:00"
     },
     {
       "domain": "docs.aiori.internal",
@@ -190,7 +190,7 @@
       "tls_certificates": [],
       "has_dangling_records": false,
       "dangling_candidates": [],
-      "last_scanned": "2026-10-14T03:59:11.499423+00:00"
+      "last_scanned": "2026-10-14T04:20:29.192059+00:00"
     },
     {
       "domain": "vpn.aiori.internal",
@@ -211,7 +211,7 @@
       "tls_certificates": [],
       "has_dangling_records": false,
       "dangling_candidates": [],
-      "last_scanned": "2026-10-14T03:59:11.499423+00:00"
+      "last_scanned": "2026-10-14T04:20:29.192059+00:00"
     },
     {
       "domain": "metrics.aiori.internal",
@@ -232,7 +232,7 @@
       "tls_certificates": [],
       "has_dangling_records": false,
       "dangling_candidates": [],
-      "last_scanned": "2026-10-14T03:59:11.499423+00:00"
+      "last_scanned": "2026-10-14T04:20:29.192059+00:00"
     },
     {
       "domain": "status.aiori.internal",
@@ -253,7 +253,7 @@
       "tls_certificates": [],
       "has_dangling_records": false,
       "dangling_candidates": [],
-      "last_scanned": "2026-10-14T03:59:11.499423+00:00"
+      "last_scanned": "2026-10-14T04:20:29.192059+00:00"
     },
     {
       "domain": "cloud-assets.aiori.internal",
@@ -274,7 +274,7 @@
       "tls_certificates": [],
       "has_dangling_records": false,
       "dangling_candidates": [],
-      "last_scanned": "2026-10-14T03:59:11.499423+00:00"
+      "last_scanned": "2026-10-14T04:20:29.192059+00:00"
     },
     {
       "domain": "dev-sandbox.aiori.internal",
@@ -295,7 +295,7 @@
       "tls_certificates": [],
       "has_dangling_records": false,
       "dangling_candidates": [],
-      "last_scanned": "2026-10-14T03:59:11.499423+00:00"
+      "last_scanned": "2026-10-14T04:20:29.192059+00:00"
     },
     {
       "domain": "orphaned-bucket.aiori.internal",
@@ -334,7 +334,7 @@
           "reason": "Target matches AWS S3 unlinked signature: 'NoSuchBucket' with HTTP 404"
         }
       ],
-      "last_scanned": "2026-10-14T03:59:11.499423+00:00"
+      "last_scanned": "2026-10-14T04:20:29.192059+00:00"
     },
     {
       "domain": "expired-tls.aiori.internal",
@@ -359,8 +359,8 @@
           "is_valid": false,
           "is_expired": true,
           "days_to_expiry": -30,
-          "not_before": "2025-09-15T03:59:11.499294+00:00",
-          "not_after": "2026-09-15T03:59:11.499294+00:00",
+          "not_before": "2025-09-15T04:20:29.191922+00:00",
+          "not_after": "2026-09-15T04:20:29.191922+00:00",
           "issuer": "AIORI Lab Internal CA",
           "subject": "expired-tls.aiori.internal",
           "sans": [
@@ -375,7 +375,7 @@
       ],
       "has_dangling_records": false,
       "dangling_candidates": [],
-      "last_scanned": "2026-10-15T03:59:11.499378+00:00"
+      "last_scanned": "2026-10-15T04:20:29.192010+00:00"
     },
     {
       "domain": "blog.aiori.internal",
@@ -414,7 +414,7 @@
           "reason": "Target matches GitHub Pages unlinked signature: 'There isn't a GitHub Pages site here' with HTTP 404"
         }
       ],
-      "last_scanned": "2026-10-14T03:59:11.499423+00:00"
+      "last_scanned": "2026-10-14T04:20:29.192059+00:00"
     },
     {
       "domain": "mail.aiori.internal",
@@ -435,7 +435,7 @@
       "tls_certificates": [],
       "has_dangling_records": false,
       "dangling_candidates": [],
-      "last_scanned": "2026-10-14T03:59:11.499423+00:00"
+      "last_scanned": "2026-10-14T04:20:29.192059+00:00"
     },
     {
       "domain": "git.aiori.internal",
@@ -456,7 +456,7 @@
       "tls_certificates": [],
       "has_dangling_records": false,
       "dangling_candidates": [],
-      "last_scanned": "2026-10-14T03:59:11.499423+00:00"
+      "last_scanned": "2026-10-14T04:20:29.192059+00:00"
     },
     {
       "domain": "ci-cd.aiori.internal",
@@ -477,7 +477,7 @@
       "tls_certificates": [],
       "has_dangling_records": false,
       "dangling_candidates": [],
-      "last_scanned": "2026-10-14T03:59:11.499423+00:00"
+      "last_scanned": "2026-10-14T04:20:29.192059+00:00"
     },
     {
       "domain": "monitoring.aiori.internal",
@@ -498,7 +498,7 @@
       "tls_certificates": [],
       "has_dangling_records": false,
       "dangling_candidates": [],
-      "last_scanned": "2026-10-14T03:59:11.499423+00:00"
+      "last_scanned": "2026-10-14T04:20:29.192059+00:00"
     },
     {
       "domain": "external-gateway.aiori.internal",
@@ -519,7 +519,7 @@
       "tls_certificates": [],
       "has_dangling_records": false,
       "dangling_candidates": [],
-      "last_scanned": "2026-10-14T03:59:11.499423+00:00"
+      "last_scanned": "2026-10-14T04:20:29.192059+00:00"
     }
   ],
   "hosts": [
@@ -550,7 +550,7 @@
           "tech_stack": [],
           "security_headers": {},
           "is_unexpected": false,
-          "checked_at": "2026-10-15T03:59:11.499538+00:00"
+          "checked_at": "2026-10-15T04:20:29.192175+00:00"
         },
         {
           "host": "127.0.0.1",
@@ -569,8 +569,8 @@
             "is_valid": true,
             "is_expired": false,
             "days_to_expiry": 180,
-            "not_before": "2026-08-16T03:59:11.499388+00:00",
-            "not_after": "2027-04-13T03:59:11.499388+00:00",
+            "not_before": "2026-08-16T04:20:29.192020+00:00",
+            "not_after": "2027-04-13T04:20:29.192020+00:00",
             "issuer": "DigiCert Global Root CA",
             "subject": "lab-portal.aiori.internal",
             "sans": [
@@ -590,11 +590,11 @@
           "tech_stack": [],
           "security_headers": {},
           "is_unexpected": false,
-          "checked_at": "2026-10-15T03:59:11.499552+00:00"
+          "checked_at": "2026-10-15T04:20:29.192190+00:00"
         }
       ],
       "os_hint": null,
-      "last_scanned": "2026-10-14T03:59:11.499423+00:00"
+      "last_scanned": "2026-10-14T04:20:29.192059+00:00"
     },
     {
       "ip": "10.0.1.10",
@@ -623,7 +623,7 @@
           "tech_stack": [],
           "security_headers": {},
           "is_unexpected": false,
-          "checked_at": "2026-10-15T03:59:11.499566+00:00"
+          "checked_at": "2026-10-15T04:20:29.192205+00:00"
         },
         {
           "host": "10.0.1.10",
@@ -642,8 +642,8 @@
             "is_valid": true,
             "is_expired": false,
             "days_to_expiry": 180,
-            "not_before": "2026-08-16T03:59:11.499388+00:00",
-            "not_after": "2027-04-13T03:59:11.499388+00:00",
+            "not_before": "2026-08-16T04:20:29.192020+00:00",
+            "not_after": "2027-04-13T04:20:29.192020+00:00",
             "issuer": "DigiCert Global Root CA",
             "subject": "lab-portal.aiori.internal",
             "sans": [
@@ -663,11 +663,11 @@
           "tech_stack": [],
           "security_headers": {},
           "is_unexpected": false,
-          "checked_at": "2026-10-15T03:59:11.499576+00:00"
+          "checked_at": "2026-10-15T04:20:29.192217+00:00"
         }
       ],
       "os_hint": null,
-      "last_scanned": "2026-10-14T03:59:11.499423+00:00"
+      "last_scanned": "2026-10-14T04:20:29.192059+00:00"
     },
     {
       "ip": "10.0.1.11",
@@ -696,7 +696,7 @@
           "tech_stack": [],
           "security_headers": {},
           "is_unexpected": false,
-          "checked_at": "2026-10-15T03:59:11.499587+00:00"
+          "checked_at": "2026-10-15T04:20:29.192230+00:00"
         },
         {
           "host": "10.0.1.11",
@@ -715,8 +715,8 @@
             "is_valid": true,
             "is_expired": false,
             "days_to_expiry": 180,
-            "not_before": "2026-08-16T03:59:11.499388+00:00",
-            "not_after": "2027-04-13T03:59:11.499388+00:00",
+            "not_before": "2026-08-16T04:20:29.192020+00:00",
+            "not_after": "2027-04-13T04:20:29.192020+00:00",
             "issuer": "DigiCert Global Root CA",
             "subject": "lab-portal.aiori.internal",
             "sans": [
@@ -736,11 +736,11 @@
           "tech_stack": [],
           "security_headers": {},
           "is_unexpected": false,
-          "checked_at": "2026-10-15T03:59:11.499596+00:00"
+          "checked_at": "2026-10-15T04:20:29.192241+00:00"
         }
       ],
       "os_hint": null,
-      "last_scanned": "2026-10-14T03:59:11.499423+00:00"
+      "last_scanned": "2026-10-14T04:20:29.192059+00:00"
     },
     {
       "ip": "10.0.1.12",
@@ -769,7 +769,7 @@
           "tech_stack": [],
           "security_headers": {},
           "is_unexpected": false,
-          "checked_at": "2026-10-15T03:59:11.499608+00:00"
+          "checked_at": "2026-10-15T04:20:29.192253+00:00"
         },
         {
           "host": "10.0.1.12",
@@ -788,8 +788,8 @@
             "is_valid": true,
             "is_expired": false,
             "days_to_expiry": 180,
-            "not_before": "2026-08-16T03:59:11.499388+00:00",
-            "not_after": "2027-04-13T03:59:11.499388+00:00",
+            "not_before": "2026-08-16T04:20:29.192020+00:00",
+            "not_after": "2027-04-13T04:20:29.192020+00:00",
             "issuer": "DigiCert Global Root CA",
             "subject": "lab-portal.aiori.internal",
             "sans": [
@@ -809,11 +809,11 @@
           "tech_stack": [],
           "security_headers": {},
           "is_unexpected": false,
-          "checked_at": "2026-10-15T03:59:11.499617+00:00"
+          "checked_at": "2026-10-15T04:20:29.192263+00:00"
         }
       ],
       "os_hint": null,
-      "last_scanned": "2026-10-14T03:59:11.499423+00:00"
+      "last_scanned": "2026-10-14T04:20:29.192059+00:00"
     },
     {
       "ip": "10.0.1.15",
@@ -843,7 +843,7 @@
           "tech_stack": [],
           "security_headers": {},
           "is_unexpected": false,
-          "checked_at": "2026-10-15T03:59:11.499628+00:00"
+          "checked_at": "2026-10-15T04:20:29.192275+00:00"
         },
         {
           "host": "10.0.1.15",
@@ -862,8 +862,8 @@
             "is_valid": true,
             "is_expired": false,
             "days_to_expiry": 180,
-            "not_before": "2026-08-16T03:59:11.499388+00:00",
-            "not_after": "2027-04-13T03:59:11.499388+00:00",
+            "not_before": "2026-08-16T04:20:29.192020+00:00",
+            "not_after": "2027-04-13T04:20:29.192020+00:00",
             "issuer": "DigiCert Global Root CA",
             "subject": "lab-portal.aiori.internal",
             "sans": [
@@ -883,7 +883,7 @@
           "tech_stack": [],
           "security_headers": {},
           "is_unexpected": false,
-          "checked_at": "2026-10-15T03:59:11.499637+00:00"
+          "checked_at": "2026-10-15T04:20:29.192286+00:00"
         },
         {
           "host": "10.0.1.15",
@@ -907,11 +907,11 @@
           ],
           "security_headers": {},
           "is_unexpected": true,
-          "checked_at": "2026-10-15T03:59:11.499378+00:00"
+          "checked_at": "2026-10-15T04:20:29.192010+00:00"
         }
       ],
       "os_hint": null,
-      "last_scanned": "2026-10-15T03:59:11.499378+00:00"
+      "last_scanned": "2026-10-15T04:20:29.192010+00:00"
     },
     {
       "ip": "10.0.2.20",
@@ -940,7 +940,7 @@
           "tech_stack": [],
           "security_headers": {},
           "is_unexpected": false,
-          "checked_at": "2026-10-15T03:59:11.499647+00:00"
+          "checked_at": "2026-10-15T04:20:29.192298+00:00"
         },
         {
           "host": "10.0.2.20",
@@ -959,8 +959,8 @@
             "is_valid": true,
             "is_expired": false,
             "days_to_expiry": 180,
-            "not_before": "2026-08-16T03:59:11.499388+00:00",
-            "not_after": "2027-04-13T03:59:11.499388+00:00",
+            "not_before": "2026-08-16T04:20:29.192020+00:00",
+            "not_after": "2027-04-13T04:20:29.192020+00:00",
             "issuer": "DigiCert Global Root CA",
             "subject": "lab-portal.aiori.internal",
             "sans": [
@@ -980,11 +980,11 @@
           "tech_stack": [],
           "security_headers": {},
           "is_unexpected": false,
-          "checked_at": "2026-10-15T03:59:11.499656+00:00"
+          "checked_at": "2026-10-15T04:20:29.192307+00:00"
         }
       ],
       "os_hint": null,
-      "last_scanned": "2026-10-14T03:59:11.499423+00:00"
+      "last_scanned": "2026-10-14T04:20:29.192059+00:00"
     },
     {
       "ip": "10.0.2.25",
@@ -1013,7 +1013,7 @@
           "tech_stack": [],
           "security_headers": {},
           "is_unexpected": false,
-          "checked_at": "2026-10-15T03:59:11.499667+00:00"
+          "checked_at": "2026-10-15T04:20:29.192319+00:00"
         },
         {
           "host": "10.0.2.25",
@@ -1032,8 +1032,8 @@
             "is_valid": true,
             "is_expired": false,
             "days_to_expiry": 180,
-            "not_before": "2026-08-16T03:59:11.499388+00:00",
-            "not_after": "2027-04-13T03:59:11.499388+00:00",
+            "not_before": "2026-08-16T04:20:29.192020+00:00",
+            "not_after": "2027-04-13T04:20:29.192020+00:00",
             "issuer": "DigiCert Global Root CA",
             "subject": "lab-portal.aiori.internal",
             "sans": [
@@ -1053,11 +1053,11 @@
           "tech_stack": [],
           "security_headers": {},
           "is_unexpected": false,
-          "checked_at": "2026-10-15T03:59:11.499675+00:00"
+          "checked_at": "2026-10-15T04:20:29.192328+00:00"
         }
       ],
       "os_hint": null,
-      "last_scanned": "2026-10-14T03:59:11.499423+00:00"
+      "last_scanned": "2026-10-14T04:20:29.192059+00:00"
     },
     {
       "ip": "10.0.3.30",
@@ -1086,7 +1086,7 @@
           "tech_stack": [],
           "security_headers": {},
           "is_unexpected": false,
-          "checked_at": "2026-10-15T03:59:11.499685+00:00"
+          "checked_at": "2026-10-15T04:20:29.192340+00:00"
         },
         {
           "host": "10.0.3.30",
@@ -1105,8 +1105,8 @@
             "is_valid": true,
             "is_expired": false,
             "days_to_expiry": 180,
-            "not_before": "2026-08-16T03:59:11.499388+00:00",
-            "not_after": "2027-04-13T03:59:11.499388+00:00",
+            "not_before": "2026-08-16T04:20:29.192020+00:00",
+            "not_after": "2027-04-13T04:20:29.192020+00:00",
             "issuer": "DigiCert Global Root CA",
             "subject": "lab-portal.aiori.internal",
             "sans": [
@@ -1126,11 +1126,11 @@
           "tech_stack": [],
           "security_headers": {},
           "is_unexpected": false,
-          "checked_at": "2026-10-15T03:59:11.499693+00:00"
+          "checked_at": "2026-10-15T04:20:29.192350+00:00"
         }
       ],
       "os_hint": null,
-      "last_scanned": "2026-10-14T03:59:11.499423+00:00"
+      "last_scanned": "2026-10-14T04:20:29.192059+00:00"
     },
     {
       "ip": "10.0.3.35",
@@ -1159,7 +1159,7 @@
           "tech_stack": [],
           "security_headers": {},
           "is_unexpected": false,
-          "checked_at": "2026-10-15T03:59:11.499703+00:00"
+          "checked_at": "2026-10-15T04:20:29.192361+00:00"
         },
         {
           "host": "10.0.3.35",
@@ -1178,8 +1178,8 @@
             "is_valid": true,
             "is_expired": false,
             "days_to_expiry": 180,
-            "not_before": "2026-08-16T03:59:11.499388+00:00",
-            "not_after": "2027-04-13T03:59:11.499388+00:00",
+            "not_before": "2026-08-16T04:20:29.192020+00:00",
+            "not_after": "2027-04-13T04:20:29.192020+00:00",
             "issuer": "DigiCert Global Root CA",
             "subject": "lab-portal.aiori.internal",
             "sans": [
@@ -1199,11 +1199,11 @@
           "tech_stack": [],
           "security_headers": {},
           "is_unexpected": false,
-          "checked_at": "2026-10-15T03:59:11.499711+00:00"
+          "checked_at": "2026-10-15T04:20:29.192371+00:00"
         }
       ],
       "os_hint": null,
-      "last_scanned": "2026-10-14T03:59:11.499423+00:00"
+      "last_scanned": "2026-10-14T04:20:29.192059+00:00"
     },
     {
       "ip": "10.0.4.50",
@@ -1232,7 +1232,7 @@
           "tech_stack": [],
           "security_headers": {},
           "is_unexpected": false,
-          "checked_at": "2026-10-15T03:59:11.499722+00:00"
+          "checked_at": "2026-10-15T04:20:29.192383+00:00"
         },
         {
           "host": "10.0.4.50",
@@ -1251,8 +1251,8 @@
             "is_valid": true,
             "is_expired": false,
             "days_to_expiry": 180,
-            "not_before": "2026-08-16T03:59:11.499388+00:00",
-            "not_after": "2027-04-13T03:59:11.499388+00:00",
+            "not_before": "2026-08-16T04:20:29.192020+00:00",
+            "not_after": "2027-04-13T04:20:29.192020+00:00",
             "issuer": "DigiCert Global Root CA",
             "subject": "lab-portal.aiori.internal",
             "sans": [
@@ -1272,11 +1272,11 @@
           "tech_stack": [],
           "security_headers": {},
           "is_unexpected": false,
-          "checked_at": "2026-10-15T03:59:11.499731+00:00"
+          "checked_at": "2026-10-15T04:20:29.192392+00:00"
         }
       ],
       "os_hint": null,
-      "last_scanned": "2026-10-14T03:59:11.499423+00:00"
+      "last_scanned": "2026-10-14T04:20:29.192059+00:00"
     }
   ],
   "summary_stats": {

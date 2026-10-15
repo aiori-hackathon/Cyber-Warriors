@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block title %}Asset Inventory{% endblock %}
+{% block page_title %}Approved Asset Scope Inventory{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      <i class="fa-solid fa-layer-group" style="color: #1e40af;"></i> Authorised Target Scope
+    </div>
+    <div style="display: flex; gap: 10px;">
+      <button onclick="openModal('addAssetModal')" class="btn btn-primary btn-sm">
+        <i class="fa-solid fa-plus"></i> Add Lab Asset
+      </button>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <!-- Capacity Status Banners -->
+    <div style="display: flex; gap: 16px; margin-bottom: 20px; flex-wrap: wrap;">
+      <div style="flex: 1; min-width: 260px; padding: 14px 18px; border: 1px solid var(--border-color); border-radius: 8px; background: #ffffff;">
+        <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted);">Lab Domains Monitored</div>
+        <div style="font-size: 22px; font-weight: 800; color: var(--navy-dark); margin: 4px 0;">
+          {{ counts.approved_domains }} / {{ counts.max_domains }}
+        </div>
+        <div style="font-size: 11px; color: var(--text-muted);">
+          Strict limit enforced. {% if counts.approved_domains >= counts.max_domains %}<strong style="color: #dc2626;">Limit Reached</strong>{% else %}Slots Available{% endif %}
+        </div>
+      </div>
+
+      <div style="flex: 1; min-width: 260px; padding: 14px 18px; border: 1px solid var(--border-color); border-radius: 8px; background: #ffffff;">
+        <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--text-muted);">Lab Hosts Monitored</div>
+        <div style="font-size: 22px; font-weight: 800; color: var(--navy-dark); margin: 4px 0;">
+          {{ counts.approved_hosts }} / {{ counts.max_hosts }}
+        </div>
+        <div style="font-size: 11px; color: var(--text-muted);">
+          Strict limit enforced. {% if counts.approved_hosts >= counts.max_hosts %}<strong style="color: #dc2626;">Limit Reached</strong>{% else %}Slots Available{% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+      <input type="text" id="assetSearchInput" onkeyup="filterTable('assetSearchInput', 'assetsTable')" class="search-input" placeholder="Search assets by name or target...">
+      <div style="display: flex; gap: 10px;">
+        <a href="{{ url_for('assets_page') }}" class="btn btn-secondary btn-sm {% if not filter_type %}btn-primary{% endif %}">All</a>
+        <a href="{{ url_for('assets_page', type='domain') }}" class="btn btn-secondary btn-sm {% if filter_type == 'domain' %}btn-primary{% endif %}">Domains</a>
+        <a href="{{ url_for('assets_page', type='host') }}" class="btn btn-secondary btn-sm {% if filter_type == 'host' %}btn-primary{% endif %}">Hosts</a>
+      </div>
+    </div>
+
+    <!-- Assets Table -->
+    <div class="table-responsive">
+      <table class="data-table" id="assetsTable">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Asset Name</th>
+            <th>Type</th>
+            <th>Target Value</th>
+            <th>Mapped IP</th>
+            <th>Approval Status</th>
+            <th>Created</th>
+            <th style="text-align: right;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for a in assets %}
+          <tr>
+            <td style="font-weight: 600; color: var(--text-muted);">#{{ a.id }}</td>
+            <td style="font-weight: 600;">{{ a.name }}</td>
+            <td>
+              {% if a.asset_type == 'domain' %}
+                <span class="badge badge-low"><i class="fa-solid fa-globe"></i> Domain</span>
+              {% else %}
+                <span class="badge badge-neutral"><i class="fa-solid fa-server"></i> Host</span>
+              {% endif %}
+            </td>
+            <td><code style="font-size: 12px; color: #1e40af; font-weight: 600;">{{ a.value }}</code></td>
+            <td>{{ a.ip_address or '—' }}</td>
+            <td>
+              {% if a.is_approved %}
+                <span class="badge badge-success"><i class="fa-solid fa-check"></i> In Scope</span>
+              {% else %}
+                <span class="badge badge-neutral"><i class="fa-solid fa-ban"></i> Excluded</span>
+              {% endif %}
+            </td>
+            <td style="font-size: 11px; color: var(--text-muted); white-space: nowrap;">{{ a.created_at[:10] }}</td>
+            <td style="text-align: right; white-space: nowrap;">
+              <form action="{{ url_for('api_toggle_asset', asset_id=a.id) }}" method="POST" style="display: inline;">
+                <button type="submit" class="btn btn-secondary btn-sm" title="Toggle Approval Scope">
+                  {% if a.is_approved %}<i class="fa-solid fa-eye-slash"></i>{% else %}<i class="fa-solid fa-eye"></i>{% endif %}
+                </button>
+              </form>
+              <form action="{{ url_for('api_delete_asset', asset_id=a.id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Remove asset from inventory?');">
+                <button type="submit" class="btn btn-secondary btn-sm" style="color: #dc2626;" title="Delete Asset">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </form>
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="8" style="text-align: center; padding: 24px; color: var(--text-muted);">
+              No assets found. Click "Add Lab Asset" to enroll authorised targets.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Add Asset Modal -->
+<div id="addAssetModal" class="modal-backdrop">
+  <div class="modal-dialog">
+    <div class="modal-header">
+      <div class="modal-title"><i class="fa-solid fa-plus-circle" style="color: #2563eb;"></i> Add Approved Lab Target</div>
+      <button onclick="closeModal('addAssetModal')" style="background: none; border: none; font-size: 18px; cursor: pointer; color: var(--text-muted);">&times;</button>
+    </div>
+    <form action="{{ url_for('api_add_asset') }}" method="POST">
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Asset Type</label>
+          <select name="asset_type" class="form-control" required>
+            <option value="domain">Domain (e.g. lab-test.aiori.internal)</option>
+            <option value="host">Host / IP (e.g. 10.0.1.15 or 127.0.0.1)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Target Name / Friendly Label</label>
+          <input type="text" name="name" class="form-control" placeholder="e.g. Staging Container Node" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Target Value (Domain or IP)</label>
+          <input type="text" name="value" class="form-control" placeholder="e.g. staging-api.aiori.internal or 10.0.1.25" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Mapped IP Address (Optional for domains)</label>
+          <input type="text" name="ip_address" class="form-control" placeholder="e.g. 10.0.1.10">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Operational Notes</label>
+          <textarea name="notes" class="form-control" rows="2" placeholder="Lab purpose, assigned student team..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" onclick="closeModal('addAssetModal')" class="btn btn-secondary">Cancel</button>
+        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-check"></i> Enroll Asset</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

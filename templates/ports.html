@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Port &amp; Service Monitoring{% endblock %}
+{% block page_title %}Check 3: Selected TCP Ports &amp; Services{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      <i class="fa-solid fa-server" style="color: #1e40af;"></i> Selected TCP Port Reachability &amp; Service Fingerprinting
+    </div>
+    <div style="font-size: 11px; color: var(--text-muted);">
+      RFC 793 / Documented Allowlist
+    </div>
+  </div>
+
+  <div class="card-body">
+    <!-- Explanatory Alert -->
+    <div style="padding: 12px 16px; border-radius: 8px; background: #fefce8; border: 1px solid #fef08a; margin-bottom: 20px; font-size: 12px; color: #854d0e;">
+      <i class="fa-solid fa-circle-info mr-1"></i>
+      <strong>Check 3 Documentation:</strong> Restricts scanning strictly to an approved allowlist of ports on authorised lab hosts. Records reachability, measures millisecond latency, captures service banners, runs safe HTTP header inspection, and flags newly reachable unapproved services as unexpected drift. No exploitation or brute-forcing is performed.
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+      <input type="text" id="portSearchInput" onkeyup="filterTable('portSearchInput', 'portTable')" class="search-input" placeholder="Search host, port, or service...">
+      <div style="display: flex; gap: 8px;">
+        <span class="badge badge-high" style="font-size: 11px;">Unexpected Ports Highlighted</span>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-responsive">
+      <table class="data-table" id="portTable">
+        <thead>
+          <tr>
+            <th>Host IP:Port</th>
+            <th>State</th>
+            <th>Latency (RTT)</th>
+            <th>Identified Service</th>
+            <th>Application Details / Banner</th>
+            <th>Approval Baseline</th>
+            <th>Observed At</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in ports %}
+          <tr>
+            <td>
+              <strong style="color: #1e40af; font-family: monospace;">{{ p.host_ip }}:{{ p.port }}</strong>
+            </td>
+            <td>
+              {% if p.state == 'OPEN' %}
+                <span class="badge badge-success"><i class="fa-solid fa-circle-check"></i> OPEN</span>
+              {% elif p.state == 'FILTERED' %}
+                <span class="badge badge-medium"><i class="fa-solid fa-filter"></i> FILTERED</span>
+              {% else %}
+                <span class="badge badge-neutral">CLOSED</span>
+              {% endif %}
+            </td>
+            <td style="font-size: 12px; color: var(--text-muted);">{{ p.latency_ms or '—' }} ms</td>
+            <td>
+              <span class="badge badge-neutral" style="font-weight: 600;">{{ p.service_name or 'TCP' }}</span>
+            </td>
+            <td style="font-size: 11.5px; max-width: 320px;">
+              {% if p.http_title %}
+                <div style="font-weight: 600; color: var(--navy-dark);"><i class="fa-solid fa-window-maximize" style="color: #2563eb;"></i> {{ p.http_title }}</div>
+              {% endif %}
+              {% if p.server_header %}
+                <div style="color: var(--text-muted); font-size: 11px;">Server: <code>{{ p.server_header }}</code></div>
+              {% elif p.banner %}
+                <div style="font-family: monospace; font-size: 10.5px; color: #475569; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ p.banner[:60] }}</div>
+              {% else %}
+                <span style="color: var(--text-muted);">—</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if p.is_unexpected %}
+                <span class="badge badge-high"><i class="fa-solid fa-triangle-exclamation"></i> UNEXPECTED PORT</span>
+              {% else %}
+                <span class="badge badge-success"><i class="fa-solid fa-check"></i> Approved Baseline</span>
+              {% endif %}
+            </td>
+            <td style="font-size: 11px; color: var(--text-muted); white-space: nowrap;">{{ p.observed_at[:19] }}</td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="7" style="text-align: center; padding: 24px; color: var(--text-muted);">
+              No port observations recorded. Run a scan to inspect services.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

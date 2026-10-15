@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}TLS Monitoring{% endblock %}
+{% block page_title %}Check 2: TLS Certificate Monitoring{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      <i class="fa-solid fa-lock" style="color: #1e40af;"></i> TLS/HTTPS Certificate Validity &amp; Expiry Auditor
+    </div>
+    <div style="font-size: 11px; color: var(--text-muted);">
+      RFC 8446 / X.509 Cryptographic Verification
+    </div>
+  </div>
+
+  <div class="card-body">
+    <!-- Explanatory Alert -->
+    <div style="padding: 12px 16px; border-radius: 8px; background: #eff6ff; border: 1px solid #bfdbfe; margin-bottom: 20px; font-size: 12px; color: #1e40af;">
+      <i class="fa-solid fa-circle-info mr-1"></i>
+      <strong>Check 2 Documentation:</strong> Inspects certificates on approved TLS endpoints using Server Name Indication (SNI). Accurately calculates days to expiry, identifies expired certificates, warns on impending expirations (&le; 14 days), and cleanly distinguishes expired certificates from network connection failures.
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+      <input type="text" id="tlsSearchInput" onkeyup="filterTable('tlsSearchInput', 'tlsTable')" class="search-input" placeholder="Search domain, issuer, or cipher...">
+      <div style="display: flex; gap: 8px;">
+        <span class="badge badge-critical" style="font-size: 11px;">Expired Certs Flagged</span>
+        <span class="badge badge-medium" style="font-size: 11px;">Expiring Soon (&le; 14d)</span>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-responsive">
+      <table class="data-table" id="tlsTable">
+        <thead>
+          <tr>
+            <th>Domain:Port</th>
+            <th>Validity Status</th>
+            <th>Days to Expiry</th>
+            <th>Expiry Date (Not After)</th>
+            <th>Issuer (CA)</th>
+            <th>TLS Version &amp; Cipher</th>
+            <th>Observed At</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for t in certs %}
+          <tr>
+            <td>
+              <strong style="color: #1e40af;">{{ t.domain }}:{{ t.port }}</strong>
+            </td>
+            <td>
+              {% if t.is_expired %}
+                <span class="badge badge-critical"><i class="fa-solid fa-triangle-exclamation"></i> EXPIRED</span>
+              {% elif t.days_to_expiry is not none and t.days_to_expiry <= 14 %}
+                <span class="badge badge-medium"><i class="fa-solid fa-clock"></i> EXPIRING SOON</span>
+              {% elif t.is_valid %}
+                <span class="badge badge-success"><i class="fa-solid fa-shield-halved"></i> VALID</span>
+              {% else %}
+                <span class="badge badge-neutral">{{ t.error_message or 'No TLS' }}</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if t.days_to_expiry is not none %}
+                {% if t.days_to_expiry < 0 %}
+                  <span style="color: #dc2626; font-weight: 700;">{{ t.days_to_expiry }} days (Past)</span>
+                {% elif t.days_to_expiry <= 14 %}
+                  <span style="color: #d97706; font-weight: 700;">{{ t.days_to_expiry }} days</span>
+                {% else %}
+                  <span style="color: #166534; font-weight: 600;">{{ t.days_to_expiry }} days</span>
+                {% endif %}
+              {% else %}
+                <span style="color: var(--text-muted);">—</span>
+              {% endif %}
+            </td>
+            <td style="font-size: 12px; white-space: nowrap;">{{ t.not_after or '—' }}</td>
+            <td style="font-size: 12px; color: var(--text-main);">{{ t.issuer or '—' }}</td>
+            <td style="font-size: 11px; font-family: monospace; color: var(--text-muted);">
+              {{ t.tls_version or 'N/A' }} / {{ t.cipher_suite or 'N/A' }}
+            </td>
+            <td style="font-size: 11px; color: var(--text-muted); white-space: nowrap;">{{ t.observed_at[:19] }}</td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="7" style="text-align: center; padding: 24px; color: var(--text-muted);">
+              No TLS observations recorded. Run a scan to inspect certificates.
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

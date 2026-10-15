@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Settings &amp; Approved Scope{% endblock %}
+{% block page_title %}Settings &amp; Approved Scope Configuration{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      <i class="fa-solid fa-sliders" style="color: #1e40af;"></i> Operational Configuration &amp; Scope Policy
+    </div>
+  </div>
+
+  <div class="card-body">
+    <form action="{{ url_for('save_settings') }}" method="POST">
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+        <!-- Left Column: Scope Policy Boundaries -->
+        <div>
+          <h3 style="font-size: 14px; font-weight: 700; color: var(--navy-dark); margin-bottom: 12px;">
+            <i class="fa-solid fa-shield-halved" style="color: #10b981;"></i> PS-011 Mandated Scope Boundaries
+          </h3>
+
+          <div class="form-group">
+            <label class="form-label">Max Approved Lab Domains</label>
+            <input type="number" class="form-control" value="20" disabled>
+            <small style="color: var(--text-muted); font-size: 11px;">Fixed by hackathon key requirements: up to 20 lab domains.</small>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Max Approved Lab Hosts</label>
+            <input type="number" class="form-control" value="10" disabled>
+            <small style="color: var(--text-muted); font-size: 11px;">Fixed by hackathon key requirements: up to 10 hosts.</small>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Authorised Organisation Label</label>
+            <input type="text" name="organization_name" class="form-control" value="{{ settings.organization_name or 'AIORI-3 Cyber Lab Infrastructure' }}" required>
+          </div>
+        </div>
+
+        <!-- Right Column: Scan Parameters -->
+        <div>
+          <h3 style="font-size: 14px; font-weight: 700; color: var(--navy-dark); margin-bottom: 12px;">
+            <i class="fa-solid fa-clock" style="color: #2563eb;"></i> Monitoring &amp; Probe Parameters
+          </h3>
+
+          <div class="form-group">
+            <label class="form-label">Scheduled Scan Interval (Minutes)</label>
+            <input type="number" name="scan_interval_minutes" class="form-control" min="5" max="1440" value="{{ settings.scan_interval_minutes or '60' }}" required>
+            <small style="color: var(--text-muted); font-size: 11px;">Configurable recurring background scan interval.</small>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Socket Connect Timeout (Seconds)</label>
+            <input type="number" step="0.5" name="socket_timeout_seconds" class="form-control" min="1.0" max="10.0" value="{{ settings.socket_timeout_seconds or '3.0' }}" required>
+            <small style="color: var(--text-muted); font-size: 11px;">Conservative timeout to prevent socket hanging on Windows.</small>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Approved Port Allowlist (Comma Separated)</label>
+            <input type="text" name="allowed_ports" class="form-control" value="{{ settings.allowed_ports or '22, 53, 80, 443, 3306, 5432, 6379, 8080, 8443, 8888, 9090' }}" required>
+            <small style="color: var(--text-muted); font-size: 11px;">Only these ports are probed on approved hosts (Check 3).</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Compliance Notice -->
+      <div style="margin-top: 16px; padding: 14px 18px; border-radius: 8px; background: #f8fafc; border: 1px solid #cbd5e1; font-size: 12px; color: #334155;">
+        <i class="fa-solid fa-scale-balanced mr-1" style="color: #1e40af;"></i>
+        <strong>Ethical &amp; Authorised Operation Standard:</strong> This system uses strictly diagnostic, non-intrusive network probing. Unrestricted subnet scanning, vulnerability exploitation, brute-forcing, and hostile subdomain takeover claims are prohibited and blocked server-side by <code>core/scope_guard.py</code> and <code>modules/scope_manager.py</code>.
+      </div>
+
+      <div style="margin-top: 20px; display: flex; justify-content: flex-end;">
+        <button type="submit" class="btn btn-primary">
+          <i class="fa-solid fa-floppy-disk"></i> Save Settings
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

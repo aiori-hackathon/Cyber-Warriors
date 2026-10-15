@@ -1,7 +1,7 @@
 # AIORI-3 Attack-Surface Inventory & Change Report
 **Problem Statement:** PS-011: Authorised Attack-Surface Inventory and Change Monitor  
-**Generated:** 2026-10-15T03:59:11.516841+00:00  
-**Baseline Ref:** `snapshot_baseline_golden` | **Current Scan:** `scan_simulated_20261015_035911`  
+**Generated:** 2026-10-15T04:20:29.249573+00:00  
+**Baseline Ref:** `snapshot_baseline_golden` | **Current Scan:** `scan_simulated_20261015_042029`  
 
 ---
 ## 1. Executive Summary
@@ -52,7 +52,7 @@ The continuous attack-surface monitoring scan completed with **5 actionable aler
 - **Category:** `EXPIRED_CERTIFICATE`
 - **Severity:** **CRITICAL**
 - **Confidence Assessment:** **HIGH** (False Positive Probability: **LOW**)
-- **Description:** Target 'expired-tls.aiori.internal' is presenting an expired TLS certificate issued by 'AIORI Lab Internal CA'. Validity ended on 2026-09-15T03:59:11.499294+00:00 (30 days ago). Users visiting this service will receive severe security trust warnings.
+- **Description:** Target 'expired-tls.aiori.internal' is presenting an expired TLS certificate issued by 'AIORI Lab Internal CA'. Validity ended on 2026-09-15T04:20:29.191922+00:00 (30 days ago). Users visiting this service will receive severe security trust warnings.
 - **Technical Triage Notes:** Certificate validity timestamp expired 30 days ago. Cryptographically verified against UTC clock.
 - **Remediation Steps:** Immediately renew certificate with authorized CA and redeploy to web server.
 
