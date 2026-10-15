@@ -1,0 +1,9 @@
+# AIORI-3 PS-011: Authorised Attack-Surface Inventory and Change Monitor
+# Dependencies
+
+dnspython>=2.6.0
+cryptography>=42.0.0
+requests>=2.31.0
+Flask>=3.0.0
+colorama>=0.4.6
+reportlab>=4.0.0

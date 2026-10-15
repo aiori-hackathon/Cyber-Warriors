@@ -1,0 +1,1188 @@
+{
+  "snapshot_id": "snapshot_baseline_golden",
+  "timestamp": "2026-10-14T03:59:11.452460+00:00",
+  "scan_scope": {
+    "domains_count": 20,
+    "hosts_count": 10
+  },
+  "domains": [
+    {
+      "domain": "lab-portal.aiori.internal",
+      "dns_records": [
+        {
+          "record_type": "A",
+          "name": "lab-portal.aiori.internal",
+          "value": "10.0.1.10",
+          "ttl": 300,
+          "target_resolves": true,
+          "cname_target": null,
+          "is_dangling_candidate": false,
+          "dangling_provider": null,
+          "dangling_reason": null
+        }
+      ],
+      "resolved_ips": [],
+      "tls_certificates": [
+        {
+          "domain": "lab-portal.aiori.internal",
+          "port": 443,
+          "is_valid": true,
+          "is_expired": false,
+          "days_to_expiry": 180,
+          "not_before": "2026-08-16T03:59:11.452342+00:00",
+          "not_after": "2027-04-13T03:59:11.452342+00:00",
+          "issuer": "DigiCert Global Root CA",
+          "subject": "lab-portal.aiori.internal",
+          "sans": [
+            "lab-portal.aiori.internal",
+            "api.lab-portal.aiori.internal"
+          ],
+          "signature_algorithm": "sha256WithRSAEncryption",
+          "serial_number": "0x12345678cafe",
+          "tls_version": "TLSv1.3",
+          "cipher_suite": "TLS_AES_256_GCM_SHA384",
+          "error_message": null
+        }
+      ],
+      "has_dangling_records": false,
+      "dangling_candidates": [],
+      "last_scanned": "2026-10-14T03:59:11.452460+00:00"
+    },
+    {
+      "domain": "api.lab-portal.aiori.internal",
+      "dns_records": [
+        {
+          "record_type": "A",
+          "name": "api.lab-portal.aiori.internal",
+          "value": "10.0.1.10",
+          "ttl": 300,
+          "target_resolves": true,
+          "cname_target": null,
+          "is_dangling_candidate": false,
+          "dangling_provider": null,
+          "dangling_reason": null
+        }
+      ],
+      "resolved_ips": [],
+      "tls_certificates": [],
+      "has_dangling_records": false,
+      "dangling_candidates": [],
+      "last_scanned": "2026-10-14T03:59:11.452460+00:00"
+    },
+    {
+      "domain": "auth.lab-portal.aiori.internal",
+      "dns_records": [
+        {
+          "record_type": "A",
+          "name": "auth.lab-portal.aiori.internal",
+          "value": "10.0.1.10",
+          "ttl": 300,
+          "target_resolves": true,
+          "cname_target": null,
+          "is_dangling_candidate": false,
+          "dangling_provider": null,
+          "dangling_reason": null
+        }
+      ],
+      "resolved_ips": [],
+      "tls_certificates": [],
+      "has_dangling_records": false,
+      "dangling_candidates": [],
+      "last_scanned": "2026-10-14T03:59:11.452460+00:00"
+    },
+    {
+      "domain": "staging-api.aiori.internal",
+      "dns_records": [
+        {
+          "record_type": "A",
+          "name": "staging-api.aiori.internal",
+          "value": "10.0.1.10",
+          "ttl": 300,
+          "target_resolves": true,
+          "cname_target": null,
+          "is_dangling_candidate": false,
+          "dangling_provider": null,
+          "dangling_reason": null
+        }
+      ],
+      "resolved_ips": [],
+      "tls_certificates": [],
+      "has_dangling_records": false,
+      "dangling_candidates": [],
+      "last_scanned": "2026-10-14T03:59:11.452460+00:00"
+    },
+    {
+      "domain": "test-cdn.aiori.internal",
+      "dns_records": [
+        {
+          "record_type": "A",
+          "name": "test-cdn.aiori.internal",
+          "value": "10.0.1.10",
+          "ttl": 300,
+          "target_resolves": true,
+          "cname_target": null,
+          "is_dangling_candidate": false,
+          "dangling_provider": null,
+          "dangling_reason": null
+        }
+      ],
+      "resolved_ips": [],
+      "tls_certificates": [],
+      "has_dangling_records": false,
+      "dangling_candidates": [],
+      "last_scanned": "2026-10-14T03:59:11.452460+00:00"
+    },
+    {
+      "domain": "legacy-app.aiori.internal",
+      "dns_records": [
+        {
+          "record_type": "A",
+          "name": "legacy-app.aiori.internal",
+          "value": "10.0.1.10",
+          "ttl": 300,
+          "target_resolves": true,
+          "cname_target": null,
+          "is_dangling_candidate": false,
+          "dangling_provider": null,
+          "dangling_reason": null
+        }
+      ],
+      "resolved_ips": [],
+      "tls_certificates": [],
+      "has_dangling_records": false,
+      "dangling_candidates": [],
+      "last_scanned": "2026-10-14T03:59:11.452460+00:00"
+    },
+    {
+      "domain": "docs.aiori.internal",
+      "dns_records": [
+        {
+          "record_type": "A",
+          "name": "docs.aiori.internal",
+          "value": "10.0.1.10",
+          "ttl": 300,
+          "target_resolves": true,
+          "cname_target": null,
+          "is_dangling_candidate": false,
+          "dangling_provider": null,
+          "dangling_reason": null
+        }
+      ],
+      "resolved_ips": [],
+      "tls_certificates": [],
+      "has_dangling_records": false,
+      "dangling_candidates": [],
+      "last_scanned": "2026-10-14T03:59:11.452460+00:00"
+    },
+    {
+      "domain": "vpn.aiori.internal",
+      "dns_records": [
+        {
+          "record_type": "A",
+          "name": "vpn.aiori.internal",
+          "value": "10.0.1.10",
+          "ttl": 300,
+          "target_resolves": true,
+          "cname_target": null,
+          "is_dangling_candidate": false,
+          "dangling_provider": null,
+          "dangling_reason": null
+        }
+      ],
+      "resolved_ips": [],
+      "tls_certificates": [],
+      "has_dangling_records": false,
+      "dangling_candidates": [],
+      "last_scanned": "2026-10-14T03:59:11.452460+00:00"
+    },
+    {
+      "domain": "metrics.aiori.internal",
+      "dns_records": [
+        {
+          "record_type": "A",
+          "name": "metrics.aiori.internal",
+          "value": "10.0.1.10",
+          "ttl": 300,
+          "target_resolves": true,
+          "cname_target": null,
+          "is_dangling_candidate": false,
+          "dangling_provider": null,
+          "dangling_reason": null
+        }
+      ],
+      "resolved_ips": [],
+      "tls_certificates": [],
+      "has_dangling_records": false,
+      "dangling_candidates": [],
+      "last_scanned": "2026-10-14T03:59:11.452460+00:00"
+    },
+    {
+      "domain": "status.aiori.internal",
+      "dns_records": [
+        {
+          "record_type": "A",
+          "name": "status.aiori.internal",
+          "value": "10.0.1.10",
+          "ttl": 300,
+          "target_resolves": true,
+          "cname_target": null,
+          "is_dangling_candidate": false,
+          "dangling_provider": null,
+          "dangling_reason": null
+        }
+      ],
+      "resolved_ips": [],
+      "tls_certificates": [],
+      "has_dangling_records": false,
+      "dangling_candidates": [],
+      "last_scanned": "2026-10-14T03:59:11.452460+00:00"
+    },
+    {
+      "domain": "cloud-assets.aiori.internal",
+      "dns_records": [
+        {
+          "record_type": "A",
+          "name": "cloud-assets.aiori.internal",
+          "value": "10.0.1.10",
+          "ttl": 300,
+          "target_resolves": true,
+          "cname_target": null,
+          "is_dangling_candidate": false,
+          "dangling_provider": null,
+          "dangling_reason": null
+        }
+      ],
+      "resolved_ips": [],
+      "tls_certificates": [],
+      "has_dangling_records": false,
+      "dangling_candidates": [],
+      "last_scanned": "2026-10-14T03:59:11.452460+00:00"
+    },
+    {
+      "domain": "dev-sandbox.aiori.internal",
+      "dns_records": [
+        {
+          "record_type": "A",
+          "name": "dev-sandbox.aiori.internal",
+          "value": "10.0.1.10",
+          "ttl": 300,
+          "target_resolves": true,
+          "cname_target": null,
+          "is_dangling_candidate": false,
+          "dangling_provider": null,
+          "dangling_reason": null
+        }
+      ],
+      "resolved_ips": [],
+      "tls_certificates": [],
+      "has_dangling_records": false,
+      "dangling_candidates": [],
+      "last_scanned": "2026-10-14T03:59:11.452460+00:00"
+    },
+    {
+      "domain": "orphaned-bucket.aiori.internal",
+      "dns_records": [
+        {
+          "record_type": "A",
+          "name": "orphaned-bucket.aiori.internal",
+          "value": "10.0.1.10",
+          "ttl": 300,
+          "target_resolves": true,
+          "cname_target": null,
+          "is_dangling_candidate": false,
+          "dangling_provider": null,
+          "dangling_reason": null
+        }
+      ],
+      "resolved_ips": [],
+      "tls_certificates": [],
+      "has_dangling_records": false,
+      "dangling_candidates": [],
+      "last_scanned": "2026-10-14T03:59:11.452460+00:00"
+    },
+    {
+      "domain": "expired-tls.aiori.internal",
+      "dns_records": [
+        {
+          "record_type": "A",
+          "name": "expired-tls.aiori.internal",
+          "value": "10.0.1.10",
+          "ttl": 300,
+          "target_resolves": true,
+          "cname_target": null,
+          "is_dangling_candidate": false,
+          "dangling_provider": null,
+          "dangling_reason": null
+        }
+      ],
+      "resolved_ips": [],
+      "tls_certificates": [],
+      "has_dangling_records": false,
+      "dangling_candidates": [],
+      "last_scanned": "2026-10-14T03:59:11.452460+00:00"
+    },
+    {
+      "domain": "blog.aiori.internal",
+      "dns_records": [
+        {
+          "record_type": "A",
+          "name": "blog.aiori.internal",
+          "value": "10.0.1.10",
+          "ttl": 300,
+          "target_resolves": true,
+          "cname_target": null,
+          "is_dangling_candidate": false,
+          "dangling_provider": null,
+          "dangling_reason": null
+        }
+      ],
+      "resolved_ips": [],
+      "tls_certificates": [],
+      "has_dangling_records": false,
+      "dangling_candidates": [],
+      "last_scanned": "2026-10-14T03:59:11.452460+00:00"
+    },
+    {
+      "domain": "mail.aiori.internal",
+      "dns_records": [
+        {
+          "record_type": "A",
+          "name": "mail.aiori.internal",
+          "value": "10.0.1.10",
+          "ttl": 300,
+          "target_resolves": true,
+          "cname_target": null,
+          "is_dangling_candidate": false,
+          "dangling_provider": null,
+          "dangling_reason": null
+        }
+      ],
+      "resolved_ips": [],
+      "tls_certificates": [],
+      "has_dangling_records": false,
+      "dangling_candidates": [],
+      "last_scanned": "2026-10-14T03:59:11.452460+00:00"
+    },
+    {
+      "domain": "git.aiori.internal",
+      "dns_records": [
+        {
+          "record_type": "A",
+          "name": "git.aiori.internal",
+          "value": "10.0.1.10",
+          "ttl": 300,
+          "target_resolves": true,
+          "cname_target": null,
+          "is_dangling_candidate": false,
+          "dangling_provider": null,
+          "dangling_reason": null
+        }
+      ],
+      "resolved_ips": [],
+      "tls_certificates": [],
+      "has_dangling_records": false,
+      "dangling_candidates": [],
+      "last_scanned": "2026-10-14T03:59:11.452460+00:00"
+    },
+    {
+      "domain": "ci-cd.aiori.internal",
+      "dns_records": [
+        {
+          "record_type": "A",
+          "name": "ci-cd.aiori.internal",
+          "value": "10.0.1.10",
+          "ttl": 300,
+          "target_resolves": true,
+          "cname_target": null,
+          "is_dangling_candidate": false,
+          "dangling_provider": null,
+          "dangling_reason": null
+        }
+      ],
+      "resolved_ips": [],
+      "tls_certificates": [],
+      "has_dangling_records": false,
+      "dangling_candidates": [],
+      "last_scanned": "2026-10-14T03:59:11.452460+00:00"
+    },
+    {
+      "domain": "monitoring.aiori.internal",
+      "dns_records": [
+        {
+          "record_type": "A",
+          "name": "monitoring.aiori.internal",
+          "value": "10.0.1.10",
+          "ttl": 300,
+          "target_resolves": true,
+          "cname_target": null,
+          "is_dangling_candidate": false,
+          "dangling_provider": null,
+          "dangling_reason": null
+        }
+      ],
+      "resolved_ips": [],
+      "tls_certificates": [],
+      "has_dangling_records": false,
+      "dangling_candidates": [],
+      "last_scanned": "2026-10-14T03:59:11.452460+00:00"
+    },
+    {
+      "domain": "external-gateway.aiori.internal",
+      "dns_records": [
+        {
+          "record_type": "A",
+          "name": "external-gateway.aiori.internal",
+          "value": "10.0.1.10",
+          "ttl": 300,
+          "target_resolves": true,
+          "cname_target": null,
+          "is_dangling_candidate": false,
+          "dangling_provider": null,
+          "dangling_reason": null
+        }
+      ],
+      "resolved_ips": [],
+      "tls_certificates": [],
+      "has_dangling_records": false,
+      "dangling_candidates": [],
+      "last_scanned": "2026-10-14T03:59:11.452460+00:00"
+    }
+  ],
+  "hosts": [
+    {
+      "ip": "127.0.0.1",
+      "hostname": null,
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": [
+        {
+          "host": "127.0.0.1",
+          "port": 80,
+          "protocol": "TCP",
+          "state": "OPEN",
+          "latency_ms": 1.2,
+          "banner": null,
+          "identified_service": "HTTP",
+          "has_tls": false,
+          "tls_version": null,
+          "cipher": null,
+          "certificate": null,
+          "is_http": true,
+          "http_status": 200,
+          "http_title": null,
+          "server_header": "nginx/1.24.0",
+          "tech_stack": [],
+          "security_headers": {},
+          "is_unexpected": false,
+          "checked_at": "2026-10-15T03:59:11.452699+00:00"
+        },
+        {
+          "host": "127.0.0.1",
+          "port": 443,
+          "protocol": "TCP",
+          "state": "OPEN",
+          "latency_ms": 1.8,
+          "banner": null,
+          "identified_service": "HTTPS",
+          "has_tls": true,
+          "tls_version": "TLSv1.3",
+          "cipher": null,
+          "certificate": {
+            "domain": "lab-portal.aiori.internal",
+            "port": 443,
+            "is_valid": true,
+            "is_expired": false,
+            "days_to_expiry": 180,
+            "not_before": "2026-08-16T03:59:11.452342+00:00",
+            "not_after": "2027-04-13T03:59:11.452342+00:00",
+            "issuer": "DigiCert Global Root CA",
+            "subject": "lab-portal.aiori.internal",
+            "sans": [
+              "lab-portal.aiori.internal",
+              "api.lab-portal.aiori.internal"
+            ],
+            "signature_algorithm": "sha256WithRSAEncryption",
+            "serial_number": "0x12345678cafe",
+            "tls_version": "TLSv1.3",
+            "cipher_suite": "TLS_AES_256_GCM_SHA384",
+            "error_message": null
+          },
+          "is_http": false,
+          "http_status": null,
+          "http_title": null,
+          "server_header": null,
+          "tech_stack": [],
+          "security_headers": {},
+          "is_unexpected": false,
+          "checked_at": "2026-10-15T03:59:11.452720+00:00"
+        }
+      ],
+      "os_hint": null,
+      "last_scanned": "2026-10-14T03:59:11.452460+00:00"
+    },
+    {
+      "ip": "10.0.1.10",
+      "hostname": null,
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": [
+        {
+          "host": "10.0.1.10",
+          "port": 80,
+          "protocol": "TCP",
+          "state": "OPEN",
+          "latency_ms": 1.2,
+          "banner": null,
+          "identified_service": "HTTP",
+          "has_tls": false,
+          "tls_version": null,
+          "cipher": null,
+          "certificate": null,
+          "is_http": true,
+          "http_status": 200,
+          "http_title": null,
+          "server_header": "nginx/1.24.0",
+          "tech_stack": [],
+          "security_headers": {},
+          "is_unexpected": false,
+          "checked_at": "2026-10-15T03:59:11.452737+00:00"
+        },
+        {
+          "host": "10.0.1.10",
+          "port": 443,
+          "protocol": "TCP",
+          "state": "OPEN",
+          "latency_ms": 1.8,
+          "banner": null,
+          "identified_service": "HTTPS",
+          "has_tls": true,
+          "tls_version": "TLSv1.3",
+          "cipher": null,
+          "certificate": {
+            "domain": "lab-portal.aiori.internal",
+            "port": 443,
+            "is_valid": true,
+            "is_expired": false,
+            "days_to_expiry": 180,
+            "not_before": "2026-08-16T03:59:11.452342+00:00",
+            "not_after": "2027-04-13T03:59:11.452342+00:00",
+            "issuer": "DigiCert Global Root CA",
+            "subject": "lab-portal.aiori.internal",
+            "sans": [
+              "lab-portal.aiori.internal",
+              "api.lab-portal.aiori.internal"
+            ],
+            "signature_algorithm": "sha256WithRSAEncryption",
+            "serial_number": "0x12345678cafe",
+            "tls_version": "TLSv1.3",
+            "cipher_suite": "TLS_AES_256_GCM_SHA384",
+            "error_message": null
+          },
+          "is_http": false,
+          "http_status": null,
+          "http_title": null,
+          "server_header": null,
+          "tech_stack": [],
+          "security_headers": {},
+          "is_unexpected": false,
+          "checked_at": "2026-10-15T03:59:11.452742+00:00"
+        }
+      ],
+      "os_hint": null,
+      "last_scanned": "2026-10-14T03:59:11.452460+00:00"
+    },
+    {
+      "ip": "10.0.1.11",
+      "hostname": null,
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": [
+        {
+          "host": "10.0.1.11",
+          "port": 80,
+          "protocol": "TCP",
+          "state": "OPEN",
+          "latency_ms": 1.2,
+          "banner": null,
+          "identified_service": "HTTP",
+          "has_tls": false,
+          "tls_version": null,
+          "cipher": null,
+          "certificate": null,
+          "is_http": true,
+          "http_status": 200,
+          "http_title": null,
+          "server_header": "nginx/1.24.0",
+          "tech_stack": [],
+          "security_headers": {},
+          "is_unexpected": false,
+          "checked_at": "2026-10-15T03:59:11.452749+00:00"
+        },
+        {
+          "host": "10.0.1.11",
+          "port": 443,
+          "protocol": "TCP",
+          "state": "OPEN",
+          "latency_ms": 1.8,
+          "banner": null,
+          "identified_service": "HTTPS",
+          "has_tls": true,
+          "tls_version": "TLSv1.3",
+          "cipher": null,
+          "certificate": {
+            "domain": "lab-portal.aiori.internal",
+            "port": 443,
+            "is_valid": true,
+            "is_expired": false,
+            "days_to_expiry": 180,
+            "not_before": "2026-08-16T03:59:11.452342+00:00",
+            "not_after": "2027-04-13T03:59:11.452342+00:00",
+            "issuer": "DigiCert Global Root CA",
+            "subject": "lab-portal.aiori.internal",
+            "sans": [
+              "lab-portal.aiori.internal",
+              "api.lab-portal.aiori.internal"
+            ],
+            "signature_algorithm": "sha256WithRSAEncryption",
+            "serial_number": "0x12345678cafe",
+            "tls_version": "TLSv1.3",
+            "cipher_suite": "TLS_AES_256_GCM_SHA384",
+            "error_message": null
+          },
+          "is_http": false,
+          "http_status": null,
+          "http_title": null,
+          "server_header": null,
+          "tech_stack": [],
+          "security_headers": {},
+          "is_unexpected": false,
+          "checked_at": "2026-10-15T03:59:11.452752+00:00"
+        }
+      ],
+      "os_hint": null,
+      "last_scanned": "2026-10-14T03:59:11.452460+00:00"
+    },
+    {
+      "ip": "10.0.1.12",
+      "hostname": null,
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": [
+        {
+          "host": "10.0.1.12",
+          "port": 80,
+          "protocol": "TCP",
+          "state": "OPEN",
+          "latency_ms": 1.2,
+          "banner": null,
+          "identified_service": "HTTP",
+          "has_tls": false,
+          "tls_version": null,
+          "cipher": null,
+          "certificate": null,
+          "is_http": true,
+          "http_status": 200,
+          "http_title": null,
+          "server_header": "nginx/1.24.0",
+          "tech_stack": [],
+          "security_headers": {},
+          "is_unexpected": false,
+          "checked_at": "2026-10-15T03:59:11.452756+00:00"
+        },
+        {
+          "host": "10.0.1.12",
+          "port": 443,
+          "protocol": "TCP",
+          "state": "OPEN",
+          "latency_ms": 1.8,
+          "banner": null,
+          "identified_service": "HTTPS",
+          "has_tls": true,
+          "tls_version": "TLSv1.3",
+          "cipher": null,
+          "certificate": {
+            "domain": "lab-portal.aiori.internal",
+            "port": 443,
+            "is_valid": true,
+            "is_expired": false,
+            "days_to_expiry": 180,
+            "not_before": "2026-08-16T03:59:11.452342+00:00",
+            "not_after": "2027-04-13T03:59:11.452342+00:00",
+            "issuer": "DigiCert Global Root CA",
+            "subject": "lab-portal.aiori.internal",
+            "sans": [
+              "lab-portal.aiori.internal",
+              "api.lab-portal.aiori.internal"
+            ],
+            "signature_algorithm": "sha256WithRSAEncryption",
+            "serial_number": "0x12345678cafe",
+            "tls_version": "TLSv1.3",
+            "cipher_suite": "TLS_AES_256_GCM_SHA384",
+            "error_message": null
+          },
+          "is_http": false,
+          "http_status": null,
+          "http_title": null,
+          "server_header": null,
+          "tech_stack": [],
+          "security_headers": {},
+          "is_unexpected": false,
+          "checked_at": "2026-10-15T03:59:11.452759+00:00"
+        }
+      ],
+      "os_hint": null,
+      "last_scanned": "2026-10-14T03:59:11.452460+00:00"
+    },
+    {
+      "ip": "10.0.1.15",
+      "hostname": null,
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": [
+        {
+          "host": "10.0.1.15",
+          "port": 80,
+          "protocol": "TCP",
+          "state": "OPEN",
+          "latency_ms": 1.2,
+          "banner": null,
+          "identified_service": "HTTP",
+          "has_tls": false,
+          "tls_version": null,
+          "cipher": null,
+          "certificate": null,
+          "is_http": true,
+          "http_status": 200,
+          "http_title": null,
+          "server_header": "nginx/1.24.0",
+          "tech_stack": [],
+          "security_headers": {},
+          "is_unexpected": false,
+          "checked_at": "2026-10-15T03:59:11.452762+00:00"
+        },
+        {
+          "host": "10.0.1.15",
+          "port": 443,
+          "protocol": "TCP",
+          "state": "OPEN",
+          "latency_ms": 1.8,
+          "banner": null,
+          "identified_service": "HTTPS",
+          "has_tls": true,
+          "tls_version": "TLSv1.3",
+          "cipher": null,
+          "certificate": {
+            "domain": "lab-portal.aiori.internal",
+            "port": 443,
+            "is_valid": true,
+            "is_expired": false,
+            "days_to_expiry": 180,
+            "not_before": "2026-08-16T03:59:11.452342+00:00",
+            "not_after": "2027-04-13T03:59:11.452342+00:00",
+            "issuer": "DigiCert Global Root CA",
+            "subject": "lab-portal.aiori.internal",
+            "sans": [
+              "lab-portal.aiori.internal",
+              "api.lab-portal.aiori.internal"
+            ],
+            "signature_algorithm": "sha256WithRSAEncryption",
+            "serial_number": "0x12345678cafe",
+            "tls_version": "TLSv1.3",
+            "cipher_suite": "TLS_AES_256_GCM_SHA384",
+            "error_message": null
+          },
+          "is_http": false,
+          "http_status": null,
+          "http_title": null,
+          "server_header": null,
+          "tech_stack": [],
+          "security_headers": {},
+          "is_unexpected": false,
+          "checked_at": "2026-10-15T03:59:11.452765+00:00"
+        }
+      ],
+      "os_hint": null,
+      "last_scanned": "2026-10-14T03:59:11.452460+00:00"
+    },
+    {
+      "ip": "10.0.2.20",
+      "hostname": null,
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": [
+        {
+          "host": "10.0.2.20",
+          "port": 80,
+          "protocol": "TCP",
+          "state": "OPEN",
+          "latency_ms": 1.2,
+          "banner": null,
+          "identified_service": "HTTP",
+          "has_tls": false,
+          "tls_version": null,
+          "cipher": null,
+          "certificate": null,
+          "is_http": true,
+          "http_status": 200,
+          "http_title": null,
+          "server_header": "nginx/1.24.0",
+          "tech_stack": [],
+          "security_headers": {},
+          "is_unexpected": false,
+          "checked_at": "2026-10-15T03:59:11.452768+00:00"
+        },
+        {
+          "host": "10.0.2.20",
+          "port": 443,
+          "protocol": "TCP",
+          "state": "OPEN",
+          "latency_ms": 1.8,
+          "banner": null,
+          "identified_service": "HTTPS",
+          "has_tls": true,
+          "tls_version": "TLSv1.3",
+          "cipher": null,
+          "certificate": {
+            "domain": "lab-portal.aiori.internal",
+            "port": 443,
+            "is_valid": true,
+            "is_expired": false,
+            "days_to_expiry": 180,
+            "not_before": "2026-08-16T03:59:11.452342+00:00",
+            "not_after": "2027-04-13T03:59:11.452342+00:00",
+            "issuer": "DigiCert Global Root CA",
+            "subject": "lab-portal.aiori.internal",
+            "sans": [
+              "lab-portal.aiori.internal",
+              "api.lab-portal.aiori.internal"
+            ],
+            "signature_algorithm": "sha256WithRSAEncryption",
+            "serial_number": "0x12345678cafe",
+            "tls_version": "TLSv1.3",
+            "cipher_suite": "TLS_AES_256_GCM_SHA384",
+            "error_message": null
+          },
+          "is_http": false,
+          "http_status": null,
+          "http_title": null,
+          "server_header": null,
+          "tech_stack": [],
+          "security_headers": {},
+          "is_unexpected": false,
+          "checked_at": "2026-10-15T03:59:11.452771+00:00"
+        }
+      ],
+      "os_hint": null,
+      "last_scanned": "2026-10-14T03:59:11.452460+00:00"
+    },
+    {
+      "ip": "10.0.2.25",
+      "hostname": null,
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": [
+        {
+          "host": "10.0.2.25",
+          "port": 80,
+          "protocol": "TCP",
+          "state": "OPEN",
+          "latency_ms": 1.2,
+          "banner": null,
+          "identified_service": "HTTP",
+          "has_tls": false,
+          "tls_version": null,
+          "cipher": null,
+          "certificate": null,
+          "is_http": true,
+          "http_status": 200,
+          "http_title": null,
+          "server_header": "nginx/1.24.0",
+          "tech_stack": [],
+          "security_headers": {},
+          "is_unexpected": false,
+          "checked_at": "2026-10-15T03:59:11.452858+00:00"
+        },
+        {
+          "host": "10.0.2.25",
+          "port": 443,
+          "protocol": "TCP",
+          "state": "OPEN",
+          "latency_ms": 1.8,
+          "banner": null,
+          "identified_service": "HTTPS",
+          "has_tls": true,
+          "tls_version": "TLSv1.3",
+          "cipher": null,
+          "certificate": {
+            "domain": "lab-portal.aiori.internal",
+            "port": 443,
+            "is_valid": true,
+            "is_expired": false,
+            "days_to_expiry": 180,
+            "not_before": "2026-08-16T03:59:11.452342+00:00",
+            "not_after": "2027-04-13T03:59:11.452342+00:00",
+            "issuer": "DigiCert Global Root CA",
+            "subject": "lab-portal.aiori.internal",
+            "sans": [
+              "lab-portal.aiori.internal",
+              "api.lab-portal.aiori.internal"
+            ],
+            "signature_algorithm": "sha256WithRSAEncryption",
+            "serial_number": "0x12345678cafe",
+            "tls_version": "TLSv1.3",
+            "cipher_suite": "TLS_AES_256_GCM_SHA384",
+            "error_message": null
+          },
+          "is_http": false,
+          "http_status": null,
+          "http_title": null,
+          "server_header": null,
+          "tech_stack": [],
+          "security_headers": {},
+          "is_unexpected": false,
+          "checked_at": "2026-10-15T03:59:11.452862+00:00"
+        }
+      ],
+      "os_hint": null,
+      "last_scanned": "2026-10-14T03:59:11.452460+00:00"
+    },
+    {
+      "ip": "10.0.3.30",
+      "hostname": null,
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": [
+        {
+          "host": "10.0.3.30",
+          "port": 80,
+          "protocol": "TCP",
+          "state": "OPEN",
+          "latency_ms": 1.2,
+          "banner": null,
+          "identified_service": "HTTP",
+          "has_tls": false,
+          "tls_version": null,
+          "cipher": null,
+          "certificate": null,
+          "is_http": true,
+          "http_status": 200,
+          "http_title": null,
+          "server_header": "nginx/1.24.0",
+          "tech_stack": [],
+          "security_headers": {},
+          "is_unexpected": false,
+          "checked_at": "2026-10-15T03:59:11.452865+00:00"
+        },
+        {
+          "host": "10.0.3.30",
+          "port": 443,
+          "protocol": "TCP",
+          "state": "OPEN",
+          "latency_ms": 1.8,
+          "banner": null,
+          "identified_service": "HTTPS",
+          "has_tls": true,
+          "tls_version": "TLSv1.3",
+          "cipher": null,
+          "certificate": {
+            "domain": "lab-portal.aiori.internal",
+            "port": 443,
+            "is_valid": true,
+            "is_expired": false,
+            "days_to_expiry": 180,
+            "not_before": "2026-08-16T03:59:11.452342+00:00",
+            "not_after": "2027-04-13T03:59:11.452342+00:00",
+            "issuer": "DigiCert Global Root CA",
+            "subject": "lab-portal.aiori.internal",
+            "sans": [
+              "lab-portal.aiori.internal",
+              "api.lab-portal.aiori.internal"
+            ],
+            "signature_algorithm": "sha256WithRSAEncryption",
+            "serial_number": "0x12345678cafe",
+            "tls_version": "TLSv1.3",
+            "cipher_suite": "TLS_AES_256_GCM_SHA384",
+            "error_message": null
+          },
+          "is_http": false,
+          "http_status": null,
+          "http_title": null,
+          "server_header": null,
+          "tech_stack": [],
+          "security_headers": {},
+          "is_unexpected": false,
+          "checked_at": "2026-10-15T03:59:11.452868+00:00"
+        }
+      ],
+      "os_hint": null,
+      "last_scanned": "2026-10-14T03:59:11.452460+00:00"
+    },
+    {
+      "ip": "10.0.3.35",
+      "hostname": null,
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": [
+        {
+          "host": "10.0.3.35",
+          "port": 80,
+          "protocol": "TCP",
+          "state": "OPEN",
+          "latency_ms": 1.2,
+          "banner": null,
+          "identified_service": "HTTP",
+          "has_tls": false,
+          "tls_version": null,
+          "cipher": null,
+          "certificate": null,
+          "is_http": true,
+          "http_status": 200,
+          "http_title": null,
+          "server_header": "nginx/1.24.0",
+          "tech_stack": [],
+          "security_headers": {},
+          "is_unexpected": false,
+          "checked_at": "2026-10-15T03:59:11.452871+00:00"
+        },
+        {
+          "host": "10.0.3.35",
+          "port": 443,
+          "protocol": "TCP",
+          "state": "OPEN",
+          "latency_ms": 1.8,
+          "banner": null,
+          "identified_service": "HTTPS",
+          "has_tls": true,
+          "tls_version": "TLSv1.3",
+          "cipher": null,
+          "certificate": {
+            "domain": "lab-portal.aiori.internal",
+            "port": 443,
+            "is_valid": true,
+            "is_expired": false,
+            "days_to_expiry": 180,
+            "not_before": "2026-08-16T03:59:11.452342+00:00",
+            "not_after": "2027-04-13T03:59:11.452342+00:00",
+            "issuer": "DigiCert Global Root CA",
+            "subject": "lab-portal.aiori.internal",
+            "sans": [
+              "lab-portal.aiori.internal",
+              "api.lab-portal.aiori.internal"
+            ],
+            "signature_algorithm": "sha256WithRSAEncryption",
+            "serial_number": "0x12345678cafe",
+            "tls_version": "TLSv1.3",
+            "cipher_suite": "TLS_AES_256_GCM_SHA384",
+            "error_message": null
+          },
+          "is_http": false,
+          "http_status": null,
+          "http_title": null,
+          "server_header": null,
+          "tech_stack": [],
+          "security_headers": {},
+          "is_unexpected": false,
+          "checked_at": "2026-10-15T03:59:11.452874+00:00"
+        }
+      ],
+      "os_hint": null,
+      "last_scanned": "2026-10-14T03:59:11.452460+00:00"
+    },
+    {
+      "ip": "10.0.4.50",
+      "hostname": null,
+      "open_ports": [
+        80,
+        443
+      ],
+      "services": [
+        {
+          "host": "10.0.4.50",
+          "port": 80,
+          "protocol": "TCP",
+          "state": "OPEN",
+          "latency_ms": 1.2,
+          "banner": null,
+          "identified_service": "HTTP",
+          "has_tls": false,
+          "tls_version": null,
+          "cipher": null,
+          "certificate": null,
+          "is_http": true,
+          "http_status": 200,
+          "http_title": null,
+          "server_header": "nginx/1.24.0",
+          "tech_stack": [],
+          "security_headers": {},
+          "is_unexpected": false,
+          "checked_at": "2026-10-15T03:59:11.452880+00:00"
+        },
+        {
+          "host": "10.0.4.50",
+          "port": 443,
+          "protocol": "TCP",
+          "state": "OPEN",
+          "latency_ms": 1.8,
+          "banner": null,
+          "identified_service": "HTTPS",
+          "has_tls": true,
+          "tls_version": "TLSv1.3",
+          "cipher": null,
+          "certificate": {
+            "domain": "lab-portal.aiori.internal",
+            "port": 443,
+            "is_valid": true,
+            "is_expired": false,
+            "days_to_expiry": 180,
+            "not_before": "2026-08-16T03:59:11.452342+00:00",
+            "not_after": "2027-04-13T03:59:11.452342+00:00",
+            "issuer": "DigiCert Global Root CA",
+            "subject": "lab-portal.aiori.internal",
+            "sans": [
+              "lab-portal.aiori.internal",
+              "api.lab-portal.aiori.internal"
+            ],
+            "signature_algorithm": "sha256WithRSAEncryption",
+            "serial_number": "0x12345678cafe",
+            "tls_version": "TLSv1.3",
+            "cipher_suite": "TLS_AES_256_GCM_SHA384",
+            "error_message": null
+          },
+          "is_http": false,
+          "http_status": null,
+          "http_title": null,
+          "server_header": null,
+          "tech_stack": [],
+          "security_headers": {},
+          "is_unexpected": false,
+          "checked_at": "2026-10-15T03:59:11.452884+00:00"
+        }
+      ],
+      "os_hint": null,
+      "last_scanned": "2026-10-14T03:59:11.452460+00:00"
+    }
+  ],
+  "summary_stats": {
+    "domain_count": 20,
+    "host_count": 10,
+    "alert_count": 0
+  }
+}

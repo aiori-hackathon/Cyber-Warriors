@@ -1,0 +1,19 @@
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+
+# Local database and run logs
+*.db
+*.log
+
+# Keep data and reports directory structure
+!data/
+!data/.gitkeep
+!reports/
+!reports/.gitkeep

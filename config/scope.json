@@ -1,0 +1,79 @@
+{
+  "metadata": {
+    "project": "AIORI-3: Authorised Attack-Surface Inventory and Change Monitor",
+    "problem_statement": "PS-011",
+    "organization": "AIORI-3 Cyber Lab Infrastructure",
+    "authorization_reference": "AIORI-3-PS-011-AUTH-2026",
+    "scope_version": "1.0.0",
+    "last_updated": "2026-10-15T09:00:00Z"
+  },
+  "policy": {
+    "enforce_strict_scope": true,
+    "allow_active_probing": true,
+    "allow_exploitation": false,
+    "max_concurrency": 10,
+    "request_timeout_seconds": 4,
+    "user_agent": "AIORI-ASM-Monitor/1.0 (Authorised Research Probe; +https://github.com/aiori-hackathon)"
+  },
+  "approved_targets": {
+    "domains": [
+      "lab-portal.aiori.internal",
+      "api.lab-portal.aiori.internal",
+      "auth.lab-portal.aiori.internal",
+      "staging-api.aiori.internal",
+      "test-cdn.aiori.internal",
+      "legacy-app.aiori.internal",
+      "docs.aiori.internal",
+      "vpn.aiori.internal",
+      "metrics.aiori.internal",
+      "status.aiori.internal",
+      "cloud-assets.aiori.internal",
+      "dev-sandbox.aiori.internal",
+      "orphaned-bucket.aiori.internal",
+      "expired-tls.aiori.internal",
+      "blog.aiori.internal",
+      "mail.aiori.internal",
+      "git.aiori.internal",
+      "ci-cd.aiori.internal",
+      "monitoring.aiori.internal",
+      "external-gateway.aiori.internal"
+    ],
+    "hosts": [
+      "127.0.0.1",
+      "10.0.1.10",
+      "10.0.1.11",
+      "10.0.1.12",
+      "10.0.1.15",
+      "10.0.2.20",
+      "10.0.2.25",
+      "10.0.3.30",
+      "10.0.3.35",
+      "10.0.4.50"
+    ],
+    "ports_to_inspect": [22, 53, 80, 443, 3306, 5432, 6379, 8080, 8443, 8888, 9090]
+  },
+  "baseline_approved_services": {
+    "127.0.0.1": [80, 443],
+    "10.0.1.10": [80, 443],
+    "10.0.1.11": [22, 443],
+    "10.0.1.12": [80, 443],
+    "10.0.1.15": [443, 8443],
+    "10.0.2.20": [80, 443],
+    "10.0.2.25": [22, 443],
+    "10.0.3.30": [80],
+    "10.0.3.35": [443],
+    "10.0.4.50": [443]
+  },
+  "dangling_dns_rules": {
+    "signatures": {
+      "AWS S3": ["NoSuchBucket", "The specified bucket does not exist"],
+      "AWS Elastic Beanstalk": ["No such host", "NXDOMAIN"],
+      "GitHub Pages": ["There isn't a GitHub Pages site here", "404 Not Found"],
+      "Azure App Service": ["404 Web Site not found", "app service not found"],
+      "Heroku": ["No such app", "herokucdn.com/error-pages/no-such-app.html"],
+      "Shopify": ["Sorry, this shop is currently unavailable"],
+      "Fastly": ["Fastly error: unknown domain"],
+      "Pantheon": ["The gods are wise, but do not know of the site you are looking for"]
+    }
+  }
+}
