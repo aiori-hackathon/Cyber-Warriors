@@ -109,8 +109,9 @@ class ChangeDetector:
                 change_event_id = cursor.lastrowid
                 new_changes += 1
 
-                # Record Security Finding (with deduplication)
-                if not cls._finding_exists(cursor, host_ip, "UNEXPECTED_SERVICE"):
+                # Record Security Finding (with deduplication distinguishing host and port)
+                target_key = f"{host_ip}:{port}"
+                if not cls._finding_exists(cursor, target_key, "UNEXPECTED_SERVICE"):
                     cursor.execute("""
                         INSERT INTO security_findings (
                             scan_run_id, change_event_id, asset_id, category, severity,
@@ -242,10 +243,17 @@ class ChangeDetector:
     @classmethod
     def _finding_exists(cls, cursor, target_str: str, category: str) -> bool:
         """Helper to avoid creating duplicate OPEN alerts for unchanged findings."""
-        cursor.execute("""
-            SELECT id FROM security_findings
-            WHERE title LIKE ? AND category = ? AND status = 'OPEN'
-        """, (f"%{target_str}%", category))
+        if category == "UNEXPECTED_SERVICE" and ":" in target_str:
+            cursor.execute("""
+                SELECT id FROM security_findings
+                WHERE (title LIKE ? OR title LIKE ? OR title LIKE ? OR title LIKE ? OR title = ?)
+                  AND category = ? AND status = 'OPEN'
+            """, (f"% {target_str} %", f"% {target_str}(%", f"% {target_str}", f"{target_str} %", target_str, category))
+        else:
+            cursor.execute("""
+                SELECT id FROM security_findings
+                WHERE title LIKE ? AND category = ? AND status = 'OPEN'
+            """, (f"%{target_str}%", category))
         return cursor.fetchone() is not None
 
     @classmethod

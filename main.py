@@ -97,7 +97,7 @@ def cmd_web(args):
     banner()
     print(f"{Fore.GREEN}[*] Starting Interactive Cyber Dashboard at http://{args.host}:{args.port}/{Style.RESET_ALL}")
     print(f"    Press CTRL+C to stop.")
-    from ui.app import app
+    from app import app
     app.run(host=args.host, port=args.port, debug=False)
 
 

@@ -21,9 +21,10 @@ Limitations & Safety:
 
 import socket
 import re
-import urllib.parse
 from typing import List, Dict, Any, Tuple, Optional
 import requests
+import warnings
+from urllib3.exceptions import InsecureRequestWarning
 
 try:
     import dns.resolver
@@ -198,7 +199,14 @@ class DNSChecker:
         for scheme in ["http", "https"]:
             url = f"{scheme}://{cname_target}/"
             try:
-                resp = requests.get(url, headers=headers, timeout=self.timeout, verify=False, allow_redirects=True)
+                # Security rationale for verify=False:
+                # Decommissioned cloud targets (S3, GitHub Pages, etc.) frequently present mismatched
+                # certificates on CDN endpoints. Disabling verification allows reading the diagnostic
+                # error body (e.g., 'NoSuchBucket') without aborting. Cryptographic certificate auditing
+                # is independently handled by Check 2 (TLSChecker).
+                with warnings.catch_warnings():
+                    warnings.simplefilter("ignore", InsecureRequestWarning)
+                    resp = requests.get(url, headers=headers, timeout=self.timeout, verify=False, allow_redirects=True)
                 body = resp.text
                 for sig in signatures:
                     if sig.lower() in body.lower():

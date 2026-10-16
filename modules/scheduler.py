@@ -16,6 +16,7 @@ from modules.tls_checker import TLSChecker
 from modules.port_checker import PortChecker
 from modules.change_detector import ChangeDetector
 from modules.seeded_lab import SeededLabHarness
+from config import DEFAULT_SOCKET_TIMEOUT, DEFAULT_APPROVED_PORTS
 
 
 class BackgroundMonitor:
@@ -35,6 +36,43 @@ class BackgroundMonitor:
             if cls._instance is None:
                 cls._instance = BackgroundMonitor()
             return cls._instance
+
+    @classmethod
+    def load_runtime_settings(cls, cursor=None) -> Dict[str, Any]:
+        """Loads and parses runtime scan settings from database with config defaults fallback."""
+        should_close = False
+        conn = None
+        if cursor is None:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            should_close = True
+
+        cursor.execute("SELECT key, value FROM settings")
+        db_settings = {row["key"]: row["value"] for row in cursor.fetchall()}
+        if should_close and conn:
+            conn.close()
+
+        try:
+            socket_timeout = float(db_settings.get("socket_timeout_seconds", DEFAULT_SOCKET_TIMEOUT))
+        except (ValueError, TypeError):
+            socket_timeout = DEFAULT_SOCKET_TIMEOUT
+
+        try:
+            raw_ports = db_settings.get("allowed_ports", "")
+            if raw_ports:
+                allowed_ports = [int(p.strip()) for p in raw_ports.split(",") if p.strip().isdigit()]
+            else:
+                allowed_ports = DEFAULT_APPROVED_PORTS
+            if not allowed_ports:
+                allowed_ports = DEFAULT_APPROVED_PORTS
+        except Exception:
+            allowed_ports = DEFAULT_APPROVED_PORTS
+
+        return {
+            "socket_timeout": socket_timeout,
+            "allowed_ports": allowed_ports,
+            "raw_settings": db_settings
+        }
 
     def run_live_scan(self) -> Dict[str, Any]:
         """
@@ -61,14 +99,19 @@ class BackgroundMonitor:
             scan_run_id = cursor.lastrowid
             conn.commit()
 
+            # Load runtime settings from database, falling back to config defaults
+            runtime_cfg = self.load_runtime_settings(cursor)
+            socket_timeout = runtime_cfg["socket_timeout"]
+            allowed_ports = runtime_cfg["allowed_ports"]
+
             # 2. Retrieve Approved Targets
             targets = ScopeManager.get_approved_targets()
             domains = targets["domains"]
             hosts = targets["hosts"]
 
-            dns_checker = DNSChecker()
-            tls_checker = TLSChecker()
-            port_checker = PortChecker()
+            dns_checker = DNSChecker(timeout=socket_timeout)
+            tls_checker = TLSChecker(timeout=socket_timeout)
+            port_checker = PortChecker(timeout=socket_timeout)
 
             domains_done = 0
             hosts_done = 0
@@ -119,7 +162,7 @@ class BackgroundMonitor:
                 host_val = h["value"]
                 asset_id = h["id"]
                 try:
-                    port_results = port_checker.inspect_host_ports(host_val)
+                    port_results = port_checker.inspect_host_ports(host_val, port_list=allowed_ports)
                     for p in port_results:
                         cursor.execute("""
                             INSERT INTO port_observations (

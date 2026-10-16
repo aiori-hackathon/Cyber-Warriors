@@ -139,7 +139,7 @@ The application includes a built-in synthetic test harness (`modules/seeded_lab.
 ### Step 1: Open PowerShell / Command Prompt
 Open PowerShell and navigate to the project directory:
 ```powershell
-cd "C:\Users\DAKSH JAIN\.gemini\antigravity\scratch\attack-surface-monitor"
+cd "C:\Users\DAKSH JAIN\Desktop\Cyber Warriors"
 ```
 
 ### Step 2: (Optional) Create & Activate Virtual Environment
@@ -154,7 +154,7 @@ pip install -r requirements.txt
 ```
 
 ### Step 4: Run Automated Verification Tests
-Verify all 14 unit tests pass cleanly:
+Verify all 16 unit tests pass cleanly:
 ```powershell
 python -m unittest discover tests
 ```

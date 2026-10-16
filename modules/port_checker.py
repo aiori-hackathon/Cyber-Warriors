@@ -26,6 +26,8 @@ import re
 import json
 from typing import List, Dict, Any, Tuple, Optional
 import requests
+import warnings
+from urllib3.exceptions import InsecureRequestWarning
 
 from config import (
     DEFAULT_SOCKET_TIMEOUT, DEFAULT_APPROVED_PORTS, DEFAULT_BASELINE_SERVICES,
@@ -188,7 +190,14 @@ class PortChecker:
         }
         out = {"is_http": False}
         try:
-            resp = requests.get(url, headers=headers, timeout=self.timeout, verify=False, allow_redirects=True)
+            # Security rationale for verify=False:
+            # Internal lab endpoints (e.g. 10.0.1.15:8443) frequently use self-signed certificates or
+            # private internal CAs. Disabling verification enables banner and application metadata
+            # collection on newly discovered ports without aborting on untrusted certs.
+            # Dedicated cryptographic validation is performed separately by Check 2 (TLSChecker).
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", InsecureRequestWarning)
+                resp = requests.get(url, headers=headers, timeout=self.timeout, verify=False, allow_redirects=True)
             out["is_http"] = True
             out["status"] = resp.status_code
             out["server"] = resp.headers.get("Server")

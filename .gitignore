@@ -22,6 +22,10 @@ data/*.sqlite
 data/*.sqlite3
 data/*.db
 
+# Runtime generated scan snapshots and dynamic change reports
+data/snapshots/*.json
+reports/change_report_*.md
+
 # Python environment and secrets
 venv/
 .venv/
