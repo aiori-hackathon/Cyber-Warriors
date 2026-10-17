@@ -187,6 +187,135 @@ class TestChangeDetector(unittest.TestCase):
         conn.close()
         self.assertEqual(final_count, 3)
 
+    def test_triage_status_and_notes_persistence_across_scans(self):
+        """
+        Regression test:
+        1. When an investigator triages a finding as ACKNOWLEDGED or FALSE_POSITIVE with notes,
+           subsequent scans observing the same issue must NOT create duplicate findings.
+        2. The investigator's status, review notes, and false-positive rationale must persist.
+        3. The active finding count in the registry must NOT be inflated.
+        """
+        # Step 1: Run seeded scan to generate baseline findings
+        sim_res = SeededLabHarness.run_seeded_simulation_scan()
+        scan1_id = sim_res["scan_run_id"]
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, category, title FROM security_findings ORDER BY id ASC")
+        findings = cursor.fetchall()
+        initial_finding_count = len(findings)
+        self.assertGreater(initial_finding_count, 0)
+
+        # Pick one UNEXPECTED_SERVICE finding to acknowledge
+        unexp_f = next(f for f in findings if f["category"] == "UNEXPECTED_SERVICE")
+        unexp_id = unexp_f["id"]
+
+        # Pick one POTENTIAL_DANGLING_DNS finding to mark false positive
+        dangling_f = next(f for f in findings if f["category"] == "POTENTIAL_DANGLING_DNS")
+        dangling_id = dangling_f["id"]
+        conn.close()
+
+        # Step 2: Investigator triages both findings
+        ack_notes = "Ticket SEC-2026: Service under active review by DevOps team"
+        ChangeDetector.update_finding_status(unexp_id, "ACKNOWLEDGED", notes=ack_notes)
+
+        fp_notes = "Investigated CDN routing distribution configuration"
+        fp_reason = "Multi-tenant CDN edge 404 is default behavior"
+        ChangeDetector.update_finding_status(dangling_id, "FALSE_POSITIVE", notes=fp_notes, fp_reason=fp_reason)
+
+        # Step 3: Run a second scan with identical observations (e.g. repeated scan)
+        from datetime import datetime, timezone
+        now_str = datetime.now(timezone.utc).isoformat()
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO scan_runs (scan_type, status, start_time, notes)
+            VALUES ('simulated', 'completed', ?, 'Repeated Scan Run 2')
+        """, (now_str,))
+        scan2_id = cursor.lastrowid
+
+        # Copy observations from scan1 to scan2
+        cursor.execute("""
+            INSERT INTO port_observations (scan_run_id, host_ip, port, protocol, state, is_unexpected, service_name, banner, observed_at)
+            SELECT ?, host_ip, port, protocol, state, is_unexpected, service_name, banner, ?
+            FROM port_observations WHERE scan_run_id = ?
+        """, (scan2_id, now_str, scan1_id))
+
+        cursor.execute("""
+            INSERT INTO tls_observations (scan_run_id, domain, port, is_valid, is_expired, days_to_expiry, issuer, not_after, observed_at)
+            SELECT ?, domain, port, is_valid, is_expired, days_to_expiry, issuer, not_after, ?
+            FROM tls_observations WHERE scan_run_id = ?
+        """, (scan2_id, now_str, scan1_id))
+
+        cursor.execute("""
+            INSERT INTO dns_observations (scan_run_id, domain, record_type, record_value, is_dangling_candidate, dangling_provider, dangling_reason, observed_at)
+            SELECT ?, domain, record_type, record_value, is_dangling_candidate, dangling_provider, dangling_reason, ?
+            FROM dns_observations WHERE scan_run_id = ?
+        """, (scan2_id, now_str, scan1_id))
+
+        conn.commit()
+        conn.close()
+
+        # Step 4: Compare scan2 with baseline
+        res2 = ChangeDetector.compare_scan_with_baseline(scan2_id)
+        # No new findings should be created since all issues are already tracked (OPEN, ACKNOWLEDGED, or FALSE_POSITIVE)
+        self.assertEqual(res2["new_findings_count"], 0)
+
+        # Step 5: Verify findings registry integrity
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT COUNT(*) FROM security_findings")
+        total_findings_after = cursor.fetchone()[0]
+        self.assertEqual(total_findings_after, initial_finding_count)
+
+        # Verify acknowledged finding preserved its status and notes
+        cursor.execute("SELECT status, review_notes FROM security_findings WHERE id = ?", (unexp_id,))
+        row_ack = cursor.fetchone()
+        self.assertEqual(row_ack["status"], "ACKNOWLEDGED")
+        self.assertEqual(row_ack["review_notes"], ack_notes)
+
+        # Verify false positive finding preserved its status, notes, and rationale
+        cursor.execute("SELECT status, review_notes, false_positive_reason FROM security_findings WHERE id = ?", (dangling_id,))
+        row_fp = cursor.fetchone()
+        self.assertEqual(row_fp["status"], "FALSE_POSITIVE")
+        self.assertEqual(row_fp["review_notes"], fp_notes)
+        self.assertEqual(row_fp["false_positive_reason"], fp_reason)
+        conn.close()
+
+    def test_technical_report_includes_triage_status_notes_and_fp_reason(self):
+        """Verifies generated technical report includes triage status, investigator notes, and rationales."""
+        from modules.report_generator import ReportGenerator
+
+        # Insert a triaged finding
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO security_findings (
+                scan_run_id, category, severity, title, description, defensive_action,
+                status, confidence, false_positive_risk, review_notes, false_positive_reason,
+                created_at, updated_at
+            ) VALUES (1, 'POTENTIAL_DANGLING_DNS', 'HIGH', 'Test Dangling DNS (cdn.aiori.internal)',
+                      'Description', 'Defensive action', 'FALSE_POSITIVE', 'LOW', 'HIGH',
+                      'Verified by Analyst Alice', 'CloudFront multi-tenant default 404',
+                      '2026-10-17T00:00:00', '2026-10-17T00:00:00')
+        """)
+        conn.commit()
+        conn.close()
+
+        report_data = ReportGenerator.generate_full_technical_report()
+        md = report_data["markdown"]
+
+        # Assert status and notes appear in report
+        self.assertIn("FALSE_POSITIVE", md)
+        self.assertIn("Verified by Analyst Alice", md)
+        self.assertIn("CloudFront multi-tenant default 404", md)
+        self.assertIn("False Positive", md)
+
+        # Assert CSV export also includes notes and reason
+        csv_out = ReportGenerator.export_csv("findings")
+        self.assertIn("Verified by Analyst Alice", csv_out)
+        self.assertIn("CloudFront multi-tenant default 404", csv_out)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -154,7 +154,7 @@ pip install -r requirements.txt
 ```
 
 ### Step 4: Run Automated Verification Tests
-Verify all 16 unit tests pass cleanly:
+Verify all 18 unit tests pass cleanly:
 ```powershell
 python -m unittest discover tests
 ```

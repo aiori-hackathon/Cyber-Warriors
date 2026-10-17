@@ -68,7 +68,12 @@
               </div>
               {% if f.review_notes %}
                 <div style="font-size: 10.5px; color: #475569; margin-top: 4px; font-style: italic;">
-                  Note: {{ f.review_notes }}
+                  <i class="fa-solid fa-comment-dots"></i> Note: {{ f.review_notes }}
+                </div>
+              {% endif %}
+              {% if f.false_positive_reason %}
+                <div style="font-size: 10.5px; color: #b45309; margin-top: 2px;">
+                  <i class="fa-solid fa-filter"></i> FP Rationale: {{ f.false_positive_reason }}
                 </div>
               {% endif %}
             </td>
@@ -87,7 +92,7 @@
               {% endif %}
             </td>
             <td style="text-align: right; white-space: nowrap;">
-              <button onclick="openTriageModal('{{ f.id }}', '{{ f.title|escape }}', '{{ f.status }}')" class="btn btn-secondary btn-sm">
+              <button onclick="openTriageModal('{{ f.id }}', '{{ f.title|escape }}', '{{ f.status }}', '{{ (f.review_notes or '')|escape }}', '{{ (f.false_positive_reason or '')|escape }}')" class="btn btn-secondary btn-sm">
                 <i class="fa-solid fa-pen-to-square"></i> Triage
               </button>
             </td>
@@ -147,11 +152,15 @@
 
 {% block scripts %}
 <script>
-  function openTriageModal(findingId, title, currentStatus) {
+  function openTriageModal(findingId, title, currentStatus, currentNotes, currentFpReason) {
     const form = document.getElementById("triageForm");
     form.action = `/api/findings/${findingId}/update-status`;
     document.getElementById("triageModalFindingTitle").innerText = title;
     document.getElementById("triageStatusSelect").value = currentStatus;
+    const fpInput = document.querySelector("#triageForm input[name='fp_reason']");
+    if (fpInput) fpInput.value = currentFpReason || "";
+    const notesTextarea = document.querySelector("#triageForm textarea[name='notes']");
+    if (notesTextarea) notesTextarea.value = currentNotes || "";
     openModal("triageModal");
   }
 </script>

@@ -24,7 +24,14 @@
     <!-- Filter Bar -->
     <div class="filter-bar">
       <input type="text" id="portSearchInput" onkeyup="filterTable('portSearchInput', 'portTable')" class="search-input" placeholder="Search host, port, or service...">
-      <div style="display: flex; gap: 8px;">
+      <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+        {% if view_mode == 'all' %}
+          <a href="{{ url_for('ports_page') }}" class="btn btn-secondary btn-sm"><i class="fa-solid fa-clock-rotate-left"></i> View Latest Scan</a>
+          <span class="badge badge-neutral" style="font-size: 11px;">All History ({{ total_obs }} records)</span>
+        {% else %}
+          <a href="{{ url_for('ports_page', view='all') }}" class="btn btn-secondary btn-sm"><i class="fa-solid fa-clock-rotate-left"></i> View Full History ({{ total_obs }})</a>
+          <span class="badge badge-neutral" style="font-size: 11px;">Latest Scan #{{ current_scan_id or 'Latest' }} ({{ ports|length }} records)</span>
+        {% endif %}
         <span class="badge badge-high" style="font-size: 11px;">Unexpected Ports Highlighted</span>
       </div>
     </div>

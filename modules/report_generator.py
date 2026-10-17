@@ -60,12 +60,12 @@ class ReportGenerator:
 
         elif table_name == "findings":
             cursor.execute("""
-                SELECT f.id, f.category, f.severity, f.title, f.description, f.status, f.confidence, f.false_positive_risk, f.defensive_action, f.created_at
+                SELECT f.id, f.category, f.severity, f.title, f.description, f.status, f.confidence, f.false_positive_risk, f.defensive_action, f.review_notes, f.false_positive_reason, f.created_at
                 FROM security_findings f ORDER BY f.id DESC
             """)
-            writer.writerow(["ID", "Category", "Severity", "Title", "Description", "Status", "Confidence", "FP Risk", "Defensive Action", "Created At"])
+            writer.writerow(["ID", "Category", "Severity", "Title", "Description", "Status", "Confidence", "FP Risk", "Defensive Action", "Review Notes", "FP Reason", "Created At"])
             for r in cursor.fetchall():
-                writer.writerow([r["id"], r["category"], r["severity"], r["title"], r["description"], r["status"], r["confidence"], r["false_positive_risk"], r["defensive_action"], r["created_at"]])
+                writer.writerow([r["id"], r["category"], r["severity"], r["title"], r["description"], r["status"], r["confidence"], r["false_positive_risk"], r["defensive_action"], r["review_notes"] or "", r["false_positive_reason"] or "", r["created_at"]])
 
         elif table_name == "changes":
             cursor.execute("""
@@ -92,6 +92,12 @@ class ReportGenerator:
 
         cursor.execute("SELECT COUNT(*) FROM security_findings WHERE status = 'OPEN'")
         open_findings = cursor.fetchone()[0]
+        cursor.execute("SELECT COUNT(*) FROM security_findings WHERE status = 'ACKNOWLEDGED'")
+        ack_findings = cursor.fetchone()[0]
+        cursor.execute("SELECT COUNT(*) FROM security_findings WHERE status = 'FALSE_POSITIVE'")
+        fp_findings = cursor.fetchone()[0]
+        cursor.execute("SELECT COUNT(*) FROM security_findings WHERE status = 'RESOLVED'")
+        res_findings = cursor.fetchone()[0]
         cursor.execute("SELECT COUNT(*) FROM change_events")
         total_changes = cursor.fetchone()[0]
 
@@ -107,8 +113,8 @@ class ReportGenerator:
 
         md_content = f"""# AIORI-3 Cybersecurity Hackathon — Technical Report
 ## Project PS-011: Authorised Attack-Surface Inventory and Change Monitor
-**Date Generated:** {now_str}  
-**Classification:** Authorised Security Research / Lab Audit  
+**Date Generated:** {now_str}<br>
+**Classification:** Authorised Security Research / Lab Audit<br>
 **Author:** AIORI-3 Project Team  
 
 ---
@@ -117,6 +123,7 @@ class ReportGenerator:
 This report documents the security posture, asset drift, and vulnerability observations identified by the **Authorised Attack-Surface Inventory and Change Monitor**. The system actively tracks a bounded portfolio of **{dom_count} lab domains** and **{host_count} lab hosts**.
 
 - **Active Open Findings:** {open_findings}
+- **Triage Breakdown:** {ack_findings} Acknowledged | {fp_findings} False Positive | {res_findings} Resolved
 - **Recorded Change Events:** {total_changes}
 - **Strict Scope Boundaries:** Enforced (Limit 20 Domains / 10 Hosts)
 - **Non-Exploitation Standard:** Enforced (Diagnostic non-intrusive probes only)
@@ -134,11 +141,13 @@ The monitoring system evaluates all in-scope endpoints across four documented in
 
 ## 3. Seeded Issues Verification & False-Positive Analysis
 
-| Category | Target Asset | Severity | Status | Confidence | False Positive Probability |
-| :--- | :--- | :--- | :--- | :--- | :--- |
+| Category | Target Asset | Severity | Status | Confidence | False Positive Probability | Investigator Notes / FP Rationale |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 """
         for f in findings:
-            md_content += f"| `{f['category']}` | `{f['title'][:40]}` | **{f['severity']}** | `{f['status']}` | `{f['confidence']}` | `{f['false_positive_risk']}` |\n"
+            notes_str = f.get('review_notes') or f.get('false_positive_reason') or 'None recorded'
+            notes_str = notes_str.replace('\n', ' ').replace('|', '/')[:50]
+            md_content += f"| `{f['category']}` | `{f['title'][:35]}` | **{f['severity']}** | `{f['status']}` | `{f['confidence']}` | `{f['false_positive_risk']}` | {notes_str} |\n"
 
         md_content += """
 ---
@@ -153,6 +162,8 @@ The monitoring system evaluates all in-scope endpoints across four documented in
 ## 5. Security Findings Detail & Defensive Actions
 """
         for idx, f in enumerate(findings, 1):
+            notes_val = f.get('review_notes') or 'None recorded'
+            fp_val = f"\n- **False-Positive Rationale:** {f['false_positive_reason']}" if f.get('false_positive_reason') else ""
             md_content += f"""
 ### Finding #{idx}: {f['title']}
 - **Category:** `{f['category']}`
@@ -160,7 +171,7 @@ The monitoring system evaluates all in-scope endpoints across four documented in
 - **Confidence Rating:** `{f['confidence']}` (FP Risk: `{f['false_positive_risk']}`)
 - **Description:** {f['description']}
 - **Recommended Defensive Action:** {f['defensive_action']}
-- **Review Notes:** {f.get('review_notes') or 'None recorded'}
+- **Review Notes:** {notes_val}{fp_val}
 """
 
         # Save to file

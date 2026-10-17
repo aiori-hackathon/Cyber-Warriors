@@ -111,7 +111,8 @@ class ChangeDetector:
 
                 # Record Security Finding (with deduplication distinguishing host and port)
                 target_key = f"{host_ip}:{port}"
-                if not cls._finding_exists(cursor, target_key, "UNEXPECTED_SERVICE"):
+                existing_id = cls._get_active_finding_id(cursor, target_key, "UNEXPECTED_SERVICE")
+                if not existing_id:
                     cursor.execute("""
                         INSERT INTO security_findings (
                             scan_run_id, change_event_id, asset_id, category, severity,
@@ -120,6 +121,12 @@ class ChangeDetector:
                         ) VALUES (?, ?, ?, 'UNEXPECTED_SERVICE', ?, ?, ?, ?, ?, 'OPEN', 'HIGH', 'LOW', ?, ?)
                     """, (scan_run_id, change_event_id, asset_id, severity, title, desc, evidence, defensive_action, now_str, now_str))
                     new_findings += 1
+                else:
+                    cursor.execute("""
+                        UPDATE security_findings
+                        SET evidence = ?, updated_at = ?
+                        WHERE id = ?
+                    """, (evidence, now_str, existing_id))
 
         # ----------------------------------------------------------------------
         # 2. Check TLS Observations (Expired & Expiring Certificates)
@@ -152,7 +159,8 @@ class ChangeDetector:
                 change_event_id = cursor.lastrowid
                 new_changes += 1
 
-                if not cls._finding_exists(cursor, domain, "EXPIRED_CERTIFICATE"):
+                existing_id = cls._get_active_finding_id(cursor, domain, "EXPIRED_CERTIFICATE")
+                if not existing_id:
                     cursor.execute("""
                         INSERT INTO security_findings (
                             scan_run_id, change_event_id, asset_id, category, severity,
@@ -161,6 +169,12 @@ class ChangeDetector:
                         ) VALUES (?, ?, ?, 'EXPIRED_CERTIFICATE', 'CRITICAL', ?, ?, ?, ?, 'OPEN', 'HIGH', 'LOW', ?, ?)
                     """, (scan_run_id, change_event_id, asset_id, title, desc, evidence, action, now_str, now_str))
                     new_findings += 1
+                else:
+                    cursor.execute("""
+                        UPDATE security_findings
+                        SET evidence = ?, updated_at = ?
+                        WHERE id = ?
+                    """, (evidence, now_str, existing_id))
 
             elif days_left is not None and days_left <= 14:
                 title = f"Warning: TLS Certificate Expiring in {days_left} Days on {domain}"
@@ -213,7 +227,8 @@ class ChangeDetector:
             change_event_id = cursor.lastrowid
             new_changes += 1
 
-            if not cls._finding_exists(cursor, domain, "POTENTIAL_DANGLING_DNS"):
+            existing_id = cls._get_active_finding_id(cursor, domain, "POTENTIAL_DANGLING_DNS")
+            if not existing_id:
                 cursor.execute("""
                     INSERT INTO security_findings (
                         scan_run_id, change_event_id, asset_id, category, severity,
@@ -222,6 +237,12 @@ class ChangeDetector:
                     ) VALUES (?, ?, ?, 'POTENTIAL_DANGLING_DNS', 'HIGH', ?, ?, ?, ?, 'OPEN', ?, ?, ?, ?)
                 """, (scan_run_id, change_event_id, asset_id, title, desc, evidence, action, confidence, fp_risk, now_str, now_str))
                 new_findings += 1
+            else:
+                cursor.execute("""
+                    UPDATE security_findings
+                    SET evidence = ?, updated_at = ?
+                    WHERE id = ?
+                """, (evidence, now_str, existing_id))
 
         # Update Scan Run statistics
         cursor.execute("""
@@ -241,20 +262,46 @@ class ChangeDetector:
         }
 
     @classmethod
-    def _finding_exists(cls, cursor, target_str: str, category: str) -> bool:
-        """Helper to avoid creating duplicate OPEN alerts for unchanged findings."""
+    def _get_active_finding_id(cls, cursor, target_str: str, category: str) -> Optional[int]:
+        """
+        Helper to look up an active or triaged finding for an asset and category.
+        Distinguishes active states (OPEN, ACKNOWLEDGED, FALSE_POSITIVE) so repeated
+        observations do not create duplicate findings or overwrite triage decisions.
+        """
         if category == "UNEXPECTED_SERVICE" and ":" in target_str:
             cursor.execute("""
                 SELECT id FROM security_findings
                 WHERE (title LIKE ? OR title LIKE ? OR title LIKE ? OR title LIKE ? OR title = ?)
-                  AND category = ? AND status = 'OPEN'
+                  AND category = ? AND status IN ('OPEN', 'ACKNOWLEDGED', 'FALSE_POSITIVE')
+                ORDER BY id DESC LIMIT 1
             """, (f"% {target_str} %", f"% {target_str}(%", f"% {target_str}", f"{target_str} %", target_str, category))
+        elif category == "POTENTIAL_DANGLING_DNS":
+            cursor.execute("""
+                SELECT id FROM security_findings
+                WHERE (title LIKE ? OR title LIKE ? OR title = ?)
+                  AND category = ? AND status IN ('OPEN', 'ACKNOWLEDGED', 'FALSE_POSITIVE')
+                ORDER BY id DESC LIMIT 1
+            """, (f"%({target_str})%", f"% {target_str} %", target_str, category))
+        elif category == "EXPIRED_CERTIFICATE":
+            cursor.execute("""
+                SELECT id FROM security_findings
+                WHERE (title LIKE ? OR title LIKE ? OR title = ?)
+                  AND category = ? AND status IN ('OPEN', 'ACKNOWLEDGED', 'FALSE_POSITIVE')
+                ORDER BY id DESC LIMIT 1
+            """, (f"% on {target_str}%", f"% {target_str} %", target_str, category))
         else:
             cursor.execute("""
                 SELECT id FROM security_findings
-                WHERE title LIKE ? AND category = ? AND status = 'OPEN'
+                WHERE title LIKE ? AND category = ? AND status IN ('OPEN', 'ACKNOWLEDGED', 'FALSE_POSITIVE')
+                ORDER BY id DESC LIMIT 1
             """, (f"%{target_str}%", category))
-        return cursor.fetchone() is not None
+        row = cursor.fetchone()
+        return row["id"] if row else None
+
+    @classmethod
+    def _finding_exists(cls, cursor, target_str: str, category: str) -> bool:
+        """Helper to avoid creating duplicate alerts for unchanged active findings."""
+        return cls._get_active_finding_id(cursor, target_str, category) is not None
 
     @classmethod
     def update_finding_status(cls, finding_id: int, new_status: str, notes: str = "", fp_reason: str = "") -> bool:

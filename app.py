@@ -51,21 +51,35 @@ def dashboard():
     cursor.execute("SELECT COUNT(*) FROM change_events")
     total_changes = cursor.fetchone()[0]
 
-    # Specific seed counts
-    cursor.execute("SELECT COUNT(*) FROM tls_observations WHERE is_expired = 1")
-    expired_certs = cursor.fetchone()[0]
-    cursor.execute("SELECT COUNT(*) FROM port_observations WHERE is_unexpected = 1")
-    unexpected_services = cursor.fetchone()[0]
-    cursor.execute("SELECT COUNT(*) FROM dns_observations WHERE is_dangling_candidate = 1")
-    dangling_dns = cursor.fetchone()[0]
-    cursor.execute("SELECT COUNT(*) FROM port_observations WHERE state = 'OPEN'")
-    open_ports_count = cursor.fetchone()[0]
-
     # Last scan details
     cursor.execute("SELECT * FROM scan_runs ORDER BY id DESC LIMIT 1")
     last_scan = cursor.fetchone()
     last_scan_time = last_scan["start_time"][:19].replace("T", " ") if last_scan else None
     last_scan_type = last_scan["scan_type"].capitalize() if last_scan else "None"
+
+    # Specific seed counts (evaluated from latest completed scan to prevent historical observation accumulation)
+    cursor.execute("SELECT id FROM scan_runs WHERE status = 'completed' ORDER BY id DESC LIMIT 1")
+    comp_scan = cursor.fetchone()
+    latest_completed_id = comp_scan["id"] if comp_scan else (last_scan["id"] if last_scan else None)
+
+    if latest_completed_id:
+        cursor.execute("SELECT COUNT(DISTINCT domain) FROM tls_observations WHERE scan_run_id = ? AND is_expired = 1", (latest_completed_id,))
+        expired_certs = cursor.fetchone()[0]
+        cursor.execute("SELECT COUNT(DISTINCT host_ip || ':' || port) FROM port_observations WHERE scan_run_id = ? AND is_unexpected = 1", (latest_completed_id,))
+        unexpected_services = cursor.fetchone()[0]
+        cursor.execute("SELECT COUNT(DISTINCT domain) FROM dns_observations WHERE scan_run_id = ? AND is_dangling_candidate = 1", (latest_completed_id,))
+        dangling_dns = cursor.fetchone()[0]
+        cursor.execute("SELECT COUNT(*) FROM port_observations WHERE scan_run_id = ? AND state = 'OPEN'", (latest_completed_id,))
+        open_ports_count = cursor.fetchone()[0]
+    else:
+        cursor.execute("SELECT COUNT(DISTINCT domain) FROM tls_observations WHERE is_expired = 1")
+        expired_certs = cursor.fetchone()[0]
+        cursor.execute("SELECT COUNT(DISTINCT host_ip || ':' || port) FROM port_observations WHERE is_unexpected = 1")
+        unexpected_services = cursor.fetchone()[0]
+        cursor.execute("SELECT COUNT(DISTINCT domain) FROM dns_observations WHERE is_dangling_candidate = 1")
+        dangling_dns = cursor.fetchone()[0]
+        cursor.execute("SELECT COUNT(DISTINCT host_ip || ':' || port) FROM port_observations WHERE state = 'OPEN'")
+        open_ports_count = cursor.fetchone()[0]
 
     # Severity counts for Chart.js
     cursor.execute("SELECT COUNT(*) FROM security_findings WHERE severity = 'CRITICAL' AND status = 'OPEN'")
@@ -166,15 +180,45 @@ def api_toggle_asset(asset_id):
 # ------------------------------------------------------------------------------
 @app.route("/dns")
 def dns_page():
+    view_mode = request.args.get("view", "latest")
+    scan_id = request.args.get("scan_id")
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("""
-        SELECT * FROM dns_observations
-        ORDER BY is_dangling_candidate DESC, id DESC LIMIT 500
-    """)
+    cursor.execute("SELECT COUNT(*) FROM dns_observations")
+    total_obs = cursor.fetchone()[0]
+
+    cursor.execute("SELECT id FROM scan_runs WHERE status = 'completed' ORDER BY id DESC LIMIT 1")
+    comp_scan = cursor.fetchone()
+    latest_scan_id = comp_scan["id"] if comp_scan else None
+
+    if scan_id:
+        cursor.execute("""
+            SELECT * FROM dns_observations
+            WHERE scan_run_id = ?
+            ORDER BY is_dangling_candidate DESC, id DESC
+        """, (scan_id,))
+    elif view_mode == "all" or not latest_scan_id:
+        cursor.execute("""
+            SELECT * FROM dns_observations
+            ORDER BY is_dangling_candidate DESC, id DESC LIMIT 500
+        """)
+    else:
+        cursor.execute("""
+            SELECT * FROM dns_observations
+            WHERE scan_run_id = ?
+            ORDER BY is_dangling_candidate DESC, id DESC
+        """, (latest_scan_id,))
+
     records = [dict(r) for r in cursor.fetchall()]
     conn.close()
-    return render_template("dns.html", active_page="dns", records=records)
+    return render_template(
+        "dns.html",
+        active_page="dns",
+        records=records,
+        view_mode=view_mode,
+        current_scan_id=scan_id or latest_scan_id,
+        total_obs=total_obs
+    )
 
 
 # ------------------------------------------------------------------------------
@@ -182,15 +226,45 @@ def dns_page():
 # ------------------------------------------------------------------------------
 @app.route("/tls")
 def tls_page():
+    view_mode = request.args.get("view", "latest")
+    scan_id = request.args.get("scan_id")
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("""
-        SELECT * FROM tls_observations
-        ORDER BY is_expired DESC, days_to_expiry ASC, id DESC LIMIT 500
-    """)
+    cursor.execute("SELECT COUNT(*) FROM tls_observations")
+    total_obs = cursor.fetchone()[0]
+
+    cursor.execute("SELECT id FROM scan_runs WHERE status = 'completed' ORDER BY id DESC LIMIT 1")
+    comp_scan = cursor.fetchone()
+    latest_scan_id = comp_scan["id"] if comp_scan else None
+
+    if scan_id:
+        cursor.execute("""
+            SELECT * FROM tls_observations
+            WHERE scan_run_id = ?
+            ORDER BY is_expired DESC, days_to_expiry ASC, id DESC
+        """, (scan_id,))
+    elif view_mode == "all" or not latest_scan_id:
+        cursor.execute("""
+            SELECT * FROM tls_observations
+            ORDER BY is_expired DESC, days_to_expiry ASC, id DESC LIMIT 500
+        """)
+    else:
+        cursor.execute("""
+            SELECT * FROM tls_observations
+            WHERE scan_run_id = ?
+            ORDER BY is_expired DESC, days_to_expiry ASC, id DESC
+        """, (latest_scan_id,))
+
     certs = [dict(r) for r in cursor.fetchall()]
     conn.close()
-    return render_template("tls.html", active_page="tls", certs=certs)
+    return render_template(
+        "tls.html",
+        active_page="tls",
+        certs=certs,
+        view_mode=view_mode,
+        current_scan_id=scan_id or latest_scan_id,
+        total_obs=total_obs
+    )
 
 
 # ------------------------------------------------------------------------------
@@ -198,15 +272,45 @@ def tls_page():
 # ------------------------------------------------------------------------------
 @app.route("/ports")
 def ports_page():
+    view_mode = request.args.get("view", "latest")
+    scan_id = request.args.get("scan_id")
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("""
-        SELECT * FROM port_observations
-        ORDER BY is_unexpected DESC, state ASC, id DESC LIMIT 500
-    """)
+    cursor.execute("SELECT COUNT(*) FROM port_observations")
+    total_obs = cursor.fetchone()[0]
+
+    cursor.execute("SELECT id FROM scan_runs WHERE status = 'completed' ORDER BY id DESC LIMIT 1")
+    comp_scan = cursor.fetchone()
+    latest_scan_id = comp_scan["id"] if comp_scan else None
+
+    if scan_id:
+        cursor.execute("""
+            SELECT * FROM port_observations
+            WHERE scan_run_id = ?
+            ORDER BY is_unexpected DESC, state ASC, id DESC
+        """, (scan_id,))
+    elif view_mode == "all" or not latest_scan_id:
+        cursor.execute("""
+            SELECT * FROM port_observations
+            ORDER BY is_unexpected DESC, state ASC, id DESC LIMIT 500
+        """)
+    else:
+        cursor.execute("""
+            SELECT * FROM port_observations
+            WHERE scan_run_id = ?
+            ORDER BY is_unexpected DESC, state ASC, id DESC
+        """, (latest_scan_id,))
+
     ports = [dict(r) for r in cursor.fetchall()]
     conn.close()
-    return render_template("ports.html", active_page="ports", ports=ports)
+    return render_template(
+        "ports.html",
+        active_page="ports",
+        ports=ports,
+        view_mode=view_mode,
+        current_scan_id=scan_id or latest_scan_id,
+        total_obs=total_obs
+    )
 
 
 # ------------------------------------------------------------------------------
