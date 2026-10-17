@@ -1,7 +1,7 @@
-# AIORI-3 Cybersecurity Hackathon — Technical Report
+﻿# AIORI-3 Cybersecurity Hackathon â€” Technical Report
 ## Project PS-011: Authorised Attack-Surface Inventory and Change Monitor
-**Date Generated:** 2026-10-15 05:22:53 UTC  
-**Classification:** Authorised Security Research / Lab Audit  
+**Date Generated:** 2026-10-17 14:47:37 UTC<br>
+**Classification:** Authorised Security Research / Lab Audit<br>
 **Author:** AIORI-3 Project Team  
 
 ---
@@ -9,8 +9,9 @@
 ## 1. Executive Summary
 This report documents the security posture, asset drift, and vulnerability observations identified by the **Authorised Attack-Surface Inventory and Change Monitor**. The system actively tracks a bounded portfolio of **20 lab domains** and **10 lab hosts**.
 
-- **Active Open Findings:** 0
-- **Recorded Change Events:** 0
+- **Open Findings in Demonstration Dataset:** 7 (seeded test scenarios; not independently verified external vulnerabilities)
+- **Triage Breakdown:** 0 Acknowledged | 0 False Positive | 0 Resolved
+- **Recorded Change Events:** 10
 - **Strict Scope Boundaries:** Enforced (Limit 20 Domains / 10 Hosts)
 - **Non-Exploitation Standard:** Enforced (Diagnostic non-intrusive probes only)
 
@@ -27,9 +28,17 @@ The monitoring system evaluates all in-scope endpoints across four documented in
 
 ## 3. Seeded Issues Verification & False-Positive Analysis
 
-| Category | Target Asset | Severity | Status | Confidence | False Positive Probability |
-| :--- | :--- | :--- | :--- | :--- | :--- |
-| `UNEXPECTED_SERVICE` | `Test Finding` | **HIGH** | `FALSE_POSITIVE` | `HIGH` | `LOW` |
+Demonstration-data note: The findings listed in this section represent seeded test scenarios used to demonstrate the monitoring and triage workflow. They must not be interpreted as independently verified vulnerabilities on real external systems. Potential dangling DNS indicators require manual verification, and all results should be interpreted within the authorised lab scope.
+
+| Category | Target Asset | Severity | Status | Confidence | False Positive Probability | Investigator Notes / FP Rationale |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| `POTENTIAL_DANGLING_DNS` | `Potential Dangling DNS Record Point` | **HIGH** | `OPEN` | `LOW` | `HIGH` | Manual investigator review not recorded |
+| `POTENTIAL_DANGLING_DNS` | `Potential Dangling DNS Record Point` | **HIGH** | `OPEN` | `HIGH` | `LOW` | Manual investigator review not recorded |
+| `POTENTIAL_DANGLING_DNS` | `Potential Dangling DNS Record Point` | **HIGH** | `OPEN` | `HIGH` | `LOW` | Manual investigator review not recorded |
+| `EXPIRED_CERTIFICATE` | `Critical: Expired TLS Certificate o` | **CRITICAL** | `OPEN` | `HIGH` | `LOW` | Manual investigator review not recorded |
+| `UNEXPECTED_SERVICE` | `Unexpected Open Service Detected on` | **HIGH** | `OPEN` | `HIGH` | `LOW` | Manual investigator review not recorded |
+| `UNEXPECTED_SERVICE` | `Unexpected Open Service Detected on` | **HIGH** | `OPEN` | `HIGH` | `LOW` | Manual investigator review not recorded |
+| `UNEXPECTED_SERVICE` | `Unexpected Open Service Detected on` | **HIGH** | `OPEN` | `HIGH` | `LOW` | Manual investigator review not recorded |
 
 ---
 
@@ -42,10 +51,59 @@ The monitoring system evaluates all in-scope endpoints across four documented in
 
 ## 5. Security Findings Detail & Defensive Actions
 
-### Finding #1: Test Finding
-- **Category:** `UNEXPECTED_SERVICE`
-- **Severity:** `HIGH` | **Status:** `FALSE_POSITIVE`
+### Finding #1: Potential Dangling DNS Record Pointing to AWS CloudFront (test-cdn.aiori.internal)
+- **Category:** `POTENTIAL_DANGLING_DNS`
+- **Severity:** `HIGH` | **Status:** `OPEN`
+- **Confidence Rating:** `LOW` (FP Risk: `HIGH`)
+- **Description:** Domain 'test-cdn.aiori.internal' possesses a CNAME pointing to 'd123456789.cloudfront.net' (AWS CloudFront). Detection indicator: Target returned HTTP 404 (Multi-tenant edge distribution). Bounded verification only: no exploitability claimed.
+- **Recommended Defensive Action:** Verify whether the AWS CloudFront resource was deleted. Remove orphan CNAME from authoritative DNS zone or reclaim asset.
+- **Review Notes:** Manual investigator review not recorded
+
+### Finding #2: Potential Dangling DNS Record Pointing to GitHub Pages (blog.aiori.internal)
+- **Category:** `POTENTIAL_DANGLING_DNS`
+- **Severity:** `HIGH` | **Status:** `OPEN`
 - **Confidence Rating:** `HIGH` (FP Risk: `LOW`)
-- **Description:** Test Desc
-- **Recommended Defensive Action:** Action
-- **Review Notes:** Verified CDN edge
+- **Description:** Domain 'blog.aiori.internal' possesses a CNAME pointing to 'aiori-legacy-blog.github.io' (GitHub Pages). Detection indicator: Target matches GitHub Pages unlinked signature: There isnt a GitHub Pages site here with HTTP 404. Bounded verification only: no exploitability claimed.
+- **Recommended Defensive Action:** Verify whether the GitHub Pages resource was deleted. Remove orphan CNAME from authoritative DNS zone or reclaim asset.
+- **Review Notes:** Manual investigator review not recorded
+
+### Finding #3: Potential Dangling DNS Record Pointing to AWS S3 (orphaned-bucket.aiori.internal)
+- **Category:** `POTENTIAL_DANGLING_DNS`
+- **Severity:** `HIGH` | **Status:** `OPEN`
+- **Confidence Rating:** `HIGH` (FP Risk: `LOW`)
+- **Description:** Domain 'orphaned-bucket.aiori.internal' possesses a CNAME pointing to 'aiori-decommissioned-assets.s3.amazonaws.com' (AWS S3). Detection indicator: Target matches AWS S3 unlinked signature: NoSuchBucket with HTTP 404. Bounded verification only: no exploitability claimed.
+- **Recommended Defensive Action:** Verify whether the AWS S3 resource was deleted. Remove orphan CNAME from authoritative DNS zone or reclaim asset.
+- **Review Notes:** Manual investigator review not recorded
+
+### Finding #4: Critical: Expired TLS Certificate on expired-tls.aiori.internal
+- **Category:** `EXPIRED_CERTIFICATE`
+- **Severity:** `CRITICAL` | **Status:** `OPEN`
+- **Confidence Rating:** `HIGH` (FP Risk: `LOW`)
+- **Description:** Domain 'expired-tls.aiori.internal' presents an expired TLS certificate issued by 'AIORI Lab Internal CA'. Expired on 2026-09-17T14:46:22.576456+00:00.
+- **Recommended Defensive Action:** Immediately renew certificate with authoritative CA and deploy to load balancer or web server.
+- **Review Notes:** Manual investigator review not recorded
+
+### Finding #5: Unexpected Open Service Detected on 10.0.1.15:88 (Kerberos)
+- **Category:** `UNEXPECTED_SERVICE`
+- **Severity:** `HIGH` | **Status:** `OPEN`
+- **Confidence Rating:** `HIGH` (FP Risk: `LOW`)
+- **Description:** Host '10.0.1.15' has newly opened port 88 (Kerberos). This service was not present in the baseline inventory.
+- **Recommended Defensive Action:** Inspect process listening on 10.0.1.15:88. If unauthorized, shut down service and block port at firewall.
+- **Review Notes:** Manual investigator review not recorded
+
+### Finding #6: Unexpected Open Service Detected on 10.0.1.15:9090 (Prometheus-Metrics)
+- **Category:** `UNEXPECTED_SERVICE`
+- **Severity:** `HIGH` | **Status:** `OPEN`
+- **Confidence Rating:** `HIGH` (FP Risk: `LOW`)
+- **Description:** Host '10.0.1.15' has newly opened port 9090 (Prometheus-Metrics). This service was not present in the baseline inventory.
+- **Recommended Defensive Action:** Inspect process listening on 10.0.1.15:9090. If unauthorized, shut down service and block port at firewall.
+- **Review Notes:** Manual investigator review not recorded
+
+### Finding #7: Unexpected Open Service Detected on 10.0.1.15:8888 (HTTP-Dev-Console)
+- **Category:** `UNEXPECTED_SERVICE`
+- **Severity:** `HIGH` | **Status:** `OPEN`
+- **Confidence Rating:** `HIGH` (FP Risk: `LOW`)
+- **Description:** Host '10.0.1.15' has newly opened port 8888 (HTTP-Dev-Console). This service was not present in the baseline inventory.
+- **Recommended Defensive Action:** Inspect process listening on 10.0.1.15:8888. If unauthorized, shut down service and block port at firewall.
+- **Review Notes:** Manual investigator review not recorded
+
